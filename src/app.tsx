@@ -1,4 +1,4 @@
-import './app.scss';
+import './app.css';
 import { FileRoutes } from '@solidjs/start/router';
 import Nav from '~/components/Nav';
 import { Router } from '@solidjs/router';
