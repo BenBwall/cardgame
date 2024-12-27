@@ -3,6 +3,7 @@ import Card, { PlayingCard } from './Card';
 
 export interface HandProps {
     playerName: string;
+    opponent?: boolean;
 }
 
 class PlayerHand {
@@ -25,17 +26,18 @@ class PlayerHand {
     }
 }
 
-const Hand = (props: HandProps) => {
+const Hand = ({ playerName, opponent = false }: HandProps) => {
     const hand = new PlayerHand(
         createSignal([] as PlayingCard[], {
             equals: false,
-            name: `${props.playerName}'s Hand`,
+            name: `${playerName}'s Hand`,
         }),
     );
-    hand.drawCard({ rank: 'Ace', suit: 'Hearts' });
 
     return (
-        <div class='hand flex gap-2'>
+        <div
+            class={`hand flex gap-2 ${opponent ? 'flex-row-reverse' : 'flex-row'} bg-amber-100 dark:bg-gray-900 min-h-5`}
+        >
             <For each={hand.cards()}>{(card) => Card({ value: card })}</For>
         </div>
     );

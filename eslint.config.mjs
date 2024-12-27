@@ -123,6 +123,15 @@ export default [
             'no-object-constructor': 'error',
             'no-octal-escape': 'error',
             'no-proto': 'error',
+            'no-restricted-syntax': [
+                'warn',
+                {
+                    message:
+                        "Don't use inspect or inspectErr in production please.",
+                    selector:
+                        'CallExpression[callee.name=/^(inspect|inspectErr)$/]',
+                },
+            ],
             'no-return-assign': 'error',
             'no-script-url': 'error',
             'no-throw-literal': 'error',

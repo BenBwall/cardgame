@@ -1,9 +1,5 @@
 // @refresh reload
 import { mount, StartClient } from '@solidjs/start/client';
+import { assertNotNull } from './util/not-undef';
 
-const app = document.getElementById('app');
-if (!app) {
-    throw new Error('No app element found');
-}
-
-mount(() => <StartClient />, app);
+mount(() => <StartClient />, assertNotNull(document.getElementById('app')));
