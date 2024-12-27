@@ -1,5 +1,6 @@
 import { A } from '@solidjs/router';
 import Counter from '~/components/Counter';
+import Hand from '~/components/Hand';
 
 const Home = () => (
     <main class='text-center mx-auto text-gray-700 p-4'>
@@ -7,6 +8,7 @@ const Home = () => (
             Hello world!
         </h1>
         <Counter />
+        <Hand playerName='Player-1' />
         <p class='mt-8'>
             Visit{' '}
             <a

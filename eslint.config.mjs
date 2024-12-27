@@ -73,19 +73,8 @@ export default [
             'no-unmodified-loop-condition': 'error',
             'no-unreachable-loop': 'error',
             'no-useless-assignment': 'error',
-            'no-unused-vars': [
-                'error',
-                {
-                    args: 'all',
-                    argsIgnorePattern: '^_',
-                    caughtErrors: 'all',
-                    caughtErrorsIgnorePattern: '^_',
-                    vars: 'all',
-                    varsIgnorePattern: '^_',
-                    destructuredArrayIgnorePattern: '^_',
-                    reportUsedIgnorePattern: true,
-                },
-            ],
+            // Declared as typescript-eslint rule
+            'no-unused-vars': 'off',
 
             'arrow-body-style': ['error', 'as-needed'],
             'camelcase': 'error',
@@ -107,14 +96,6 @@ export default [
             'eqeqeq': 'error',
             'guard-for-in': 'error',
             'logical-assignment-operators': ['error', 'always'],
-            'new-cap': [
-                'error',
-                {
-                    newIsCap: true,
-                    capIsNew: true,
-                    properties: true,
-                },
-            ],
             'no-alert': 'warn',
             'no-array-constructor': 'error',
             'no-console': 'warn',
@@ -206,6 +187,19 @@ export default [
                     singleReturnOnly: false,
                     classPropertiesAllowed: false,
                     allowStandaloneDeclarations: false,
+                },
+            ],
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    args: 'all',
+                    argsIgnorePattern: '^_',
+                    caughtErrors: 'all',
+                    caughtErrorsIgnorePattern: '^_',
+                    vars: 'all',
+                    varsIgnorePattern: '^_',
+                    destructuredArrayIgnorePattern: '^_',
+                    reportUsedIgnorePattern: true,
                 },
             ],
         },
