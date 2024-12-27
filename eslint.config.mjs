@@ -1,9 +1,17 @@
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
+import { fixupPluginRules } from '@eslint/compat';
 import globals from 'globals';
 import importPlugin from 'eslint-plugin-import-x';
 import js from '@eslint/js';
+import preferArrow from 'eslint-plugin-prefer-arrow';
 import { configs as tsConfigs } from 'typescript-eslint';
 import tsParser from '@typescript-eslint/parser';
+
+/**  @type {unknown} */
+const u = preferArrow;
+
+/**  @type {import('eslint').Linter.Config} */
+const arrowFunctionPlugin = u;
 
 /** @type {import('eslint').Linter.Config[]} */
 /* eslint-disable sort-keys */
@@ -15,6 +23,9 @@ export default [
     importPlugin.flatConfigs.typescript,
     eslintPluginPrettier,
     {
+        plugins: {
+            'prefer-arrow': fixupPluginRules(arrowFunctionPlugin),
+        },
         languageOptions: {
             globals: {
                 ...globals.node,
@@ -187,6 +198,16 @@ export default [
             ],
             'symbol-description': 'error',
             'yoda': ['error', 'never', { onlyEquality: true }],
+
+            'prefer-arrow/prefer-arrow-functions': [
+                'error',
+                {
+                    disallowPrototype: false,
+                    singleReturnOnly: false,
+                    classPropertiesAllowed: false,
+                    allowStandaloneDeclarations: false,
+                },
+            ],
         },
     },
 ];

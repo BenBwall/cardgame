@@ -1,6 +1,6 @@
 import { useLocation } from '@solidjs/router';
 
-export default function Nav() {
+const Nav = () => {
     const location = useLocation();
     const active = (path: string) =>
         path === location.pathname ?
@@ -18,4 +18,6 @@ export default function Nav() {
             </ul>
         </nav>
     );
-}
+};
+
+export default Nav;

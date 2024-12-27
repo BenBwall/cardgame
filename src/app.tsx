@@ -4,17 +4,17 @@ import Nav from '~/components/Nav';
 import { Router } from '@solidjs/router';
 import { Suspense } from 'solid-js';
 
-export default function App() {
-    return (
-        <Router
-            root={(props) => (
-                <>
-                    <Nav />
-                    <Suspense>{props.children}</Suspense>
-                </>
-            )}
-        >
-            <FileRoutes />
-        </Router>
-    );
-}
+const App = () => (
+    <Router
+        root={(props) => (
+            <>
+                <Nav />
+                <Suspense>{props.children}</Suspense>
+            </>
+        )}
+    >
+        <FileRoutes />
+    </Router>
+);
+
+export default App;
