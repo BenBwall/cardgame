@@ -1,23 +1,60 @@
+import { Accessor, createSignal, Setter, Show, Signal } from 'solid-js';
 import Card, { PlayingCard } from './Card';
-import { createStore, SetStoreFunction } from 'solid-js/store';
 import { assertNotUndef } from '~/util/not-undef';
-import { Show } from 'solid-js';
+import { shuffle } from '~/util/array';
 
 export interface DeckProps {
-    startingCards?: PlayingCard[];
+    cards: PlayingCard[];
     onCardDrawn?: (card: PlayingCard) => void;
 }
 
-interface PlayingDeck {
-    cards: PlayingCard[];
-}
+class PlayingDeck {
+    #getCards: Accessor<PlayingCard[]>;
+    #setCards: Setter<PlayingCard[]>;
 
-const shuffle = <T,>(array: T[]) => {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+    constructor(cards: Signal<PlayingCard[]>) {
+        [this.#getCards, this.#setCards] = cards;
     }
-};
+
+    #transform<R>(transformer: (cards: PlayingCard[]) => R): R {
+        let ret: unknown;
+        this.#setCards((cards) => {
+            ret = transformer(cards);
+            return cards;
+        });
+        return ret as R;
+    }
+
+    #use<R>(user: (cards: PlayingCard[]) => R): R {
+        return user(this.#getCards());
+    }
+
+    dealCard() {
+        return this.#transform((cards) => cards.pop());
+    }
+
+    shuffle() {
+        this.#transform((cards) => {
+            shuffle(cards);
+        });
+    }
+
+    cards() {
+        return this.#getCards();
+    }
+
+    length() {
+        return this.cards().length;
+    }
+
+    topCard(): PlayingCard | undefined {
+        return this.#use((cards) => cards[cards.length - 1]);
+    }
+
+    hasCards() {
+        return this.length() > 0;
+    }
+}
 
 const generateStartingCards = () => {
     const suits = ['Spades', 'Clubs', 'Diamonds', 'Hearts'] as const;
@@ -46,48 +83,41 @@ const generateStartingCards = () => {
     return cards;
 };
 
-const dealCard = (setDeck: SetStoreFunction<PlayingDeck>) => {
-    let ret: PlayingCard | undefined;
-    setDeck('cards', (cards) => {
-        ret = cards.pop();
-        return [...cards];
-    });
-    console.log(ret);
-    return ret;
+const getStartingCards = (
+    startingCards: PlayingCard[] | undefined | null,
+): PlayingCard[] => {
+    if (startingCards != null) {
+        return [...startingCards];
+    }
+    return generateStartingCards();
 };
 
-const topCard = (deck: PlayingDeck) => deck.cards[deck.cards.length - 1];
-
-const hasCards = (deck: PlayingDeck) => deck.cards.length > 0;
-
-const Deck = ({
-    startingCards = generateStartingCards(),
-    onCardDrawn,
-}: DeckProps) => {
-    const [deck, setDeck] = createStore<PlayingDeck>(
-        { cards: [...startingCards] },
-        {
-            name: `Deck`,
-        },
-    );
+const EmptyDeck = () => {
     return (
-        <div class='deck bg-green-500 dark:bg-green-700 text-center'>
+        <div class='empty-deck border border-black p-2 rounded w-20 h-28 flex justify-center items-center bg-gray-200'>
+            <div class='text-gray-500'>Empty Deck</div>
+        </div>
+    );
+};
+
+const Deck = (props: DeckProps) => {
+    return (
+        <div class='bg-green-500 dark:bg-green-700 text-center h-50 w-50 p-10 m-10'>
             <button
-                class='card bg-green-700 dark:bg-green-500'
+                class='bg-green-700 dark:bg-green-500'
                 onClick={() => {
-                    const card = dealCard(setDeck);
-                    if (card && onCardDrawn) {
-                        onCardDrawn(card);
+                    const card = props.cards.pop();
+                    if (card && props.onCardDrawn) {
+                        props.onCardDrawn(card);
                     }
                 }}
             >
-                <Show
-                    when={hasCards(deck)}
-                    fallback={
-                        <div class='card bg-green-700 dark:bg-green-500' />
-                    }
-                >
-                    <Card value={assertNotUndef(topCard(deck))} />
+                <Show when={props.cards.length > 0} fallback={<EmptyDeck />}>
+                    <Card
+                        value={assertNotUndef(
+                            props.cards[props.cards.length - 1],
+                        )}
+                    />
                 </Show>
             </button>
         </div>

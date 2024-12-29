@@ -93,7 +93,7 @@ export default [
             'default-case-last': 'error',
             'default-param-last': 'error',
             'dot-notation': 'error',
-            'eqeqeq': 'error',
+            'eqeqeq': ['error', 'ignore'],
             'guard-for-in': 'error',
             'logical-assignment-operators': ['error', 'always'],
             'no-alert': 'warn',
