@@ -7,12 +7,28 @@ export interface HandProps {
     opponent?: boolean;
 }
 
-const Hand = (props: HandProps) => {
+const calculateAngle = (index: number, numCards: number, totalArc: number) => {
     return (
-        <div
-            class={`flex gap-2 ${props.opponent ? 'flex-row-reverse' : 'flex-row'} bg-amber-100 dark:bg-gray-900 min-h-5`}
-        >
-            <For each={props.cards}>{(card) => Card({ value: card })}</For>
+        (totalArc / numCards) * (index + 1) -
+        (totalArc / 2 + totalArc / numCards / 2)
+    );
+};
+
+const Hand = (props: HandProps) => {
+    props.opponent ??= false;
+    return (
+        <div class={`relative ${props.opponent ? 'rotate-180 ' : ''}`}>
+            <For each={props.cards}>
+                {(card, index) => (
+                    <Card
+                        value={card}
+                        style={{
+                            transform: `rotate(${calculateAngle(index(), props.cards.length, 270)}deg)`,
+                        }}
+                        class='absolute [transform-origin:bottom_center]'
+                    />
+                )}
+            </For>
         </div>
     );
 };

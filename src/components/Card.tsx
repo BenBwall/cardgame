@@ -1,3 +1,5 @@
+import { JSX } from 'solid-js';
+
 export type Rank =
     | 'A'
     | '2'
@@ -22,6 +24,8 @@ export interface PlayingCard {
 
 export interface CardProps {
     value: PlayingCard;
+    class?: string;
+    style?: string | JSX.CSSProperties;
 }
 
 const suitSymbols: Record<Suit, string> = {
@@ -34,7 +38,10 @@ const suitSymbols: Record<Suit, string> = {
 const isRedSuit = (suit: Suit) => suit === 'Diamonds' || suit === 'Hearts';
 
 const Card = (props: CardProps) => (
-    <div class='border border-black p-2 rounded w-20 h-28 flex flex-col justify-between items-center bg-white dark:bg-black text-black dark:text-white'>
+    <div
+        class={`border border-black dark:border-white p-2 rounded w-20 h-28 flex flex-col justify-between items-center bg-white dark:bg-black text-black dark:text-white ${props.class}`}
+        style={props.style}
+    >
         <p class='text-xl font-bold'>{props.value.rank}</p>
         <p
             class={`text-xl ${isRedSuit(props.value.suit) ? 'text-red-500' : 'text-black dark:text-gray-600'}`}

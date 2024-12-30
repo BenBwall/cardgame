@@ -8,7 +8,6 @@ const App = () => (
     <Router
         root={(props) => (
             <>
-                <Nav />
                 <Suspense>{props.children}</Suspense>
             </>
         )}
