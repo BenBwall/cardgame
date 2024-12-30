@@ -1,11 +1,11 @@
-import Card, { PlayingCard } from './Card';
-import { assertNotUndef } from '~/util/not-undef';
+import FaceDownCard from './FaceDownCard';
+import { PlayingCard } from '~/game-logic/card';
 import { Show } from 'solid-js';
 
-export interface DeckProps {
+export type DeckProps = {
     cards: PlayingCard[];
     onCardDrawn: (card: PlayingCard) => void;
-}
+};
 
 const EmptyDeck = () => (
     <div class='border border-black p-2 rounded flex justify-center bg-gray-200'>
@@ -15,21 +15,18 @@ const EmptyDeck = () => (
 
 const Deck = (props: DeckProps) => (
     <div class='bg-green-500 dark:bg-green-700 rounded text-center content-center'>
-        <button
-            class='bg-green-700 dark:bg-green-500'
-            onClick={() => {
-                const card = props.cards.pop();
-                if (card !== undefined) {
-                    props.onCardDrawn(card);
-                }
-            }}
-        >
+        <div class='bg-green-700 dark:bg-green-500'>
             <Show when={props.cards.length > 0} fallback={<EmptyDeck />}>
-                <Card
-                    value={assertNotUndef(props.cards[props.cards.length - 1])}
+                <FaceDownCard
+                    onClick={() => {
+                        const card = props.cards.pop();
+                        if (card !== undefined) {
+                            props.onCardDrawn(card);
+                        }
+                    }}
                 />
             </Show>
-        </button>
+        </div>
     </div>
 );
 

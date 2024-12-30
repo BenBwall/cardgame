@@ -1,23 +1,30 @@
 import { createMutable } from 'solid-js/store';
 import { createResource } from 'solid-js';
 import Deck from './Deck';
-import Hand from './Hand';
-import { PlayingCard } from './Card';
+import OpponentHand from './OpponentHand';
+import PlayerHand from './PlayerHand';
+import { PlayingCard } from '~/game-logic/card';
 import { shuffle } from '~/util/array';
 
-export interface GameProps {
+export type GameProps = {
     playerName: string;
-}
+};
 
-interface GameState {
+type GameState = {
     opponentHand: PlayingCard[];
     playerHand: PlayingCard[];
     deck: PlayingCard[];
-}
+    opponentCardDrawnIndices: number[];
+};
 
 const generateStartingCards = (): PlayingCard[] => {
-    const suits = ['Spades', 'Clubs', 'Diamonds', 'Hearts'] as const;
-    const values = [
+    const suits = Object.freeze([
+        'Spades',
+        'Clubs',
+        'Diamonds',
+        'Hearts',
+    ] as const);
+    const values = Object.freeze([
         'A',
         '2',
         '3',
@@ -31,7 +38,7 @@ const generateStartingCards = (): PlayingCard[] => {
         'J',
         'Q',
         'K',
-    ] as const;
+    ] as const);
     const cards: PlayingCard[] = [];
     suits.forEach((suit) => {
         values.forEach((rank) => {
@@ -49,6 +56,7 @@ const Game = (props: GameProps) => {
     const state = createMutable<GameState>(
         {
             deck: startingDeck(),
+            opponentCardDrawnIndices: [],
             opponentHand: [],
             playerHand: [],
         },
@@ -57,16 +65,23 @@ const Game = (props: GameProps) => {
     let i = 0;
     return (
         <div class='grid grid-cols-1 grid-rows-3 gap-4 h-screen'>
-            <Hand cards={state.opponentHand} playerName='Opponent' opponent />
+            <OpponentHand
+                playerName='Opponent'
+                cardDrawnIndices={state.opponentCardDrawnIndices}
+            />
             <Deck
                 cards={state.deck}
                 onCardDrawn={(card) =>
                     i++ % 2 === 0 ?
                         state.playerHand.push(card)
-                    :   state.opponentHand.push(card)
+                    :   (state.opponentCardDrawnIndices.push(i / 2),
+                        state.opponentHand.push(card))
                 }
             />
-            <Hand cards={state.playerHand} playerName={props.playerName} />
+            <PlayerHand
+                cards={state.playerHand}
+                playerName={props.playerName}
+            />
         </div>
     );
 };

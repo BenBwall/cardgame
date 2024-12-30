@@ -211,6 +211,7 @@ export default [
                     reportUsedIgnorePattern: true,
                 },
             ],
+            '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
         },
     },
 ];
