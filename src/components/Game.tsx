@@ -1,9 +1,9 @@
 import { createMutable } from 'solid-js/store';
+import { createResource } from 'solid-js';
 import Deck from './Deck';
 import Hand from './Hand';
 import { PlayingCard } from './Card';
 import { shuffle } from '~/util/array';
-import { createResource } from 'solid-js';
 
 export interface GameProps {
     playerName: string;
@@ -46,11 +46,11 @@ const Game = (props: GameProps) => {
     const [startingDeck] = createResource(generateStartingCards, {
         initialValue: [],
     });
-    let state = createMutable<GameState>(
+    const state = createMutable<GameState>(
         {
+            deck: startingDeck(),
             opponentHand: [],
             playerHand: [],
-            deck: startingDeck(),
         },
         { name: 'Game State' },
     );
