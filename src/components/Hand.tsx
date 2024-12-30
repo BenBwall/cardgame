@@ -18,7 +18,7 @@ const Hand = (props: HandProps) => {
     props.opponent ??= false;
     return (
         <div
-            class={`relative flex ${props.opponent ? 'rotate-180 top-0 absolute' : 'bottom-0'} gap-2 flex-row justify-center my-5 flex-wrap max-w-full`}
+            class={`relative flex ${props.opponent ? 'rotate-180' : ''} justify-center my-5`}
         >
             <For each={props.cards}>
                 {(card, index) => (

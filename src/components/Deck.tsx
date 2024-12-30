@@ -17,7 +17,7 @@ const EmptyDeck = () => {
 
 const Deck = (props: DeckProps) => {
     return (
-        <div class='bg-green-500 dark:bg-green-700 rounded text-center align-center content-center'>
+        <div class='bg-green-500 dark:bg-green-700 rounded text-center content-center'>
             <button
                 class='bg-green-700 dark:bg-green-500'
                 onClick={() => {
