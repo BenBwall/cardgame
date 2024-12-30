@@ -17,7 +17,9 @@ const calculateAngle = (index: number, numCards: number, totalArc: number) => {
 const Hand = (props: HandProps) => {
     props.opponent ??= false;
     return (
-        <div class={`relative ${props.opponent ? 'rotate-180 ' : ''}`}>
+        <div
+            class={`relative flex ${props.opponent ? 'rotate-180 top-0 absolute' : 'bottom-0'} gap-2 flex-row justify-center my-5 flex-wrap max-w-full`}
+        >
             <For each={props.cards}>
                 {(card, index) => (
                     <Card
@@ -25,7 +27,7 @@ const Hand = (props: HandProps) => {
                         style={{
                             transform: `rotate(${calculateAngle(index(), props.cards.length, 270)}deg)`,
                         }}
-                        class='absolute [transform-origin:bottom_center]'
+                        class='absolute [transform-origin:bottom_center] p-0 m-0'
                     />
                 )}
             </For>

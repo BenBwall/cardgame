@@ -56,12 +56,12 @@ const Game = (props: GameProps) => {
     );
     let i = 0;
     return (
-        <div class='inline-flex flex-col items-center h-auto'>
+        <div class='grid grid-cols-1 grid-rows-3 gap-4 h-screen'>
             <Hand cards={state.opponentHand} playerName='Opponent' opponent />
             <Deck
                 cards={state.deck}
                 onCardDrawn={(card) =>
-                    i++ % 2 == 0 ?
+                    i++ % 2 === 0 ?
                         state.playerHand.push(card)
                     :   state.opponentHand.push(card)
                 }
