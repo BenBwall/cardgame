@@ -1,8 +1,9 @@
+import Card from '~/components/Card';
 import { createMutable } from 'solid-js/store';
 import { createResource } from 'solid-js';
-import Deck from './Deck';
-import OpponentHand from './OpponentHand';
-import PlayerHand from './PlayerHand';
+import Deck from '~/components/Deck';
+import OpponentHand from '~/components/OpponentHand';
+import PlayerHand from '~/components/PlayerHand';
 import { PlayingCard } from '~/game-logic/card';
 import { shuffle } from '~/util/array';
 
@@ -42,7 +43,7 @@ const generateStartingCards = (): PlayingCard[] => {
     const cards: PlayingCard[] = [];
     suits.forEach((suit) => {
         values.forEach((rank) => {
-            cards.push({ rank, suit });
+            cards.push(Object.freeze({ rank, suit }));
         });
     });
     shuffle(cards);
@@ -64,7 +65,7 @@ const Game = (props: GameProps) => {
     );
     let i = 0;
     return (
-        <div class='grid grid-cols-1 grid-rows-3 gap-4 h-screen'>
+        <div class='grid grid-cols-1 grid-rows-4 gap-4 h-screen'>
             <OpponentHand
                 playerName='Opponent'
                 cardDrawnIndices={state.opponentCardDrawnIndices}
@@ -78,6 +79,7 @@ const Game = (props: GameProps) => {
                         state.opponentHand.push(card))
                 }
             />
+            <Card />
             <PlayerHand
                 cards={state.playerHand}
                 playerName={props.playerName}

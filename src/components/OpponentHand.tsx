@@ -1,4 +1,4 @@
-import FaceDownCard from './FaceDownCard';
+import FaceDownCard from '~/components/FaceDownCard';
 import { For } from 'solid-js';
 
 export type OpponentHandProps = {

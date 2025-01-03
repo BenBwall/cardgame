@@ -15,7 +15,7 @@ export type Rank =
 
 export type Suit = 'Clubs' | 'Diamonds' | 'Hearts' | 'Spades';
 
-export type PlayingCard = {
+export type PlayingCard = Readonly<{
     suit: Suit;
     rank: Rank;
-};
+}>;

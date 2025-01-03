@@ -1,4 +1,4 @@
-import FaceUpCard from './FaceUpCard';
+import FaceUpCard from '~/components/FaceUpCard';
 import { For } from 'solid-js';
 import { PlayingCard } from '~/game-logic/card';
 

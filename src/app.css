@@ -16,3 +16,9 @@ body {
   background: rgb(var(--background-rgb));
   color: rgb(var(--foreground-rgb));
 }
+
+@layer components {
+  .card-side {
+    @apply absolute w-full h-full backface-hidden flex justify-center items-center rounded text-neutral-800;
+  }
+}
