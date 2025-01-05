@@ -22,7 +22,7 @@ const PlayerHand = (props: PlayerHandProps) => (
                     style={{
                         transform: `rotate(${calculateAngle(index(), props.cards.length).toString()}deg)`,
                     }}
-                    class='absolute [transform-origin:bottom_center]'
+                    class='absolute origin-bottom'
                     onClick={() => {
                         console.log(
                             `Player ${props.playerName} clicked on card ${card.rank} of ${card.suit}`,
