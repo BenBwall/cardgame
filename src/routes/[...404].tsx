@@ -1,6 +1,6 @@
 const NotFound = () => (
-    <main class='items-center justify-center flex m-0 p-0 w-screen h-screen'>
-        <h1 class='text-6xl text-sky-700 font-thin uppercase'>
+    <main class='m-0 flex h-screen w-screen items-center justify-center p-0'>
+        <h1 class='text-6xl font-thin text-sky-700 uppercase'>
             404 - Page Not Found
         </h1>
     </main>

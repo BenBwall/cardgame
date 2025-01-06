@@ -3,5 +3,6 @@
     "experimentalTernaries": true,
     "quoteProps": "consistent",
     "singleQuote": true,
-    "jsxSingleQuote": true
+    "jsxSingleQuote": true,
+    "plugins": ["prettier-plugin-tailwindcss"]
 }

@@ -8,13 +8,13 @@ export type DeckProps = {
 };
 
 const EmptyDeck = () => (
-    <div class='border border-black p-2 rounded flex justify-center bg-gray-200'>
-        <p class='text-gray-500 w-20 h-28'>Empty Deck</p>
+    <div class='flex justify-center rounded border border-black bg-gray-200 p-2'>
+        <p class='h-28 w-20 text-gray-500'>Empty Deck</p>
     </div>
 );
 
 const Deck = (props: DeckProps) => (
-    <div class='bg-green-500 dark:bg-green-700 rounded text-center content-center'>
+    <div class='content-center rounded bg-green-500 text-center dark:bg-green-700'>
         <div class='bg-green-700 dark:bg-green-500'>
             <Show when={props.cards.length > 0} fallback={<EmptyDeck />}>
                 <FaceDownCard

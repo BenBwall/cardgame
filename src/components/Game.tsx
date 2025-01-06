@@ -65,7 +65,7 @@ const Game = (props: GameProps) => {
     );
     let i = 0;
     return (
-        <div class='grid grid-cols-1 grid-rows-4 gap-4 h-screen'>
+        <div class='grid h-screen grid-cols-1 grid-rows-4 gap-4'>
             <OpponentHand
                 playerName='Opponent'
                 cardDrawnIndices={state.opponentCardDrawnIndices}

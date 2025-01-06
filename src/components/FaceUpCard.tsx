@@ -19,7 +19,7 @@ const isRedSuit = (suit: Suit) => suit === 'Diamonds' || suit === 'Hearts';
 
 const FaceUpCard = (props: FaceUpCardProps) => (
     <button
-        class={`border border-black dark:border-white p-2 rounded w-20 h-28 flex flex-col justify-between items-center bg-white dark:bg-black text-black dark:text-white ${props.class ?? ''}`}
+        class={`flex h-28 w-20 flex-col items-center justify-between rounded border border-black bg-white p-2 text-black dark:border-white dark:bg-black dark:text-white ${props.class ?? ''}`}
         style={props.style}
         on:click={props.onClick}
     >
@@ -29,7 +29,7 @@ const FaceUpCard = (props: FaceUpCardProps) => (
         >
             {suitSymbols[props.value.suit]}
         </div>
-        <div class='text-xl font-bold rotate-180'>{props.value.rank}</div>
+        <div class='rotate-180 text-xl font-bold'>{props.value.rank}</div>
     </button>
 );
 

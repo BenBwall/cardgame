@@ -14,7 +14,7 @@ const calculateAngle = (index: number, numCards: number) =>
     (CARD_CURVE_IN_DEGREES / 2 + CARD_CURVE_IN_DEGREES / numCards / 2);
 
 const PlayerHand = (props: PlayerHandProps) => (
-    <div class={`relative flex justify-center my-5`}>
+    <div class={`relative my-5 flex justify-center`}>
         <For each={props.cards}>
             {(card, index) => (
                 <FaceUpCard

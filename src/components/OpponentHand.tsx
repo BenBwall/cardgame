@@ -7,7 +7,7 @@ export type OpponentHandProps = {
 };
 
 const OpponentHand = (props: OpponentHandProps) => (
-    <div class='flex flex-row justify-center items-center'>
+    <div class='flex flex-row items-center justify-center'>
         <For each={props.cardDrawnIndices}>
             {(cardDrawnIndex, i) => (
                 <FaceDownCard
