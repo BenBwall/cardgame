@@ -1,4 +1,4 @@
-import FaceDownCard from '~/components/FaceDownCard';
+import Card from '~/components/Card';
 import { PlayingCard } from '~/game-logic/card';
 import { Show } from 'solid-js';
 
@@ -17,13 +17,16 @@ const Deck = (props: DeckProps) => (
     <div class='content-center rounded bg-green-500 text-center dark:bg-green-700'>
         <div class='bg-green-700 dark:bg-green-500'>
             <Show when={props.cards.length > 0} fallback={<EmptyDeck />}>
-                <FaceDownCard
+                <Card
+                    isFaceUp={false}
                     onClick={() => {
                         const card = props.cards.pop();
                         if (card !== undefined) {
                             props.onCardDrawn(card);
                         }
                     }}
+                    value={props.cards[props.cards.length - 1]}
+                    handIndex={undefined}
                 />
             </Show>
         </div>

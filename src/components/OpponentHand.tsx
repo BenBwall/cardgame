@@ -1,4 +1,4 @@
-import FaceDownCard from '~/components/FaceDownCard';
+import Card from '~/components/Card';
 import { For } from 'solid-js';
 
 export type OpponentHandProps = {
@@ -10,11 +10,13 @@ const OpponentHand = (props: OpponentHandProps) => (
     <div class='flex flex-row items-center justify-center'>
         <For each={props.cardDrawnIndices}>
             {(cardDrawnIndex, i) => (
-                <FaceDownCard
+                <Card
+                    isFaceUp={false}
                     handIndex={cardDrawnIndex}
                     onClick={() => {
                         props.cardDrawnIndices.splice(i(), 1);
                     }}
+                    value={{ rank: '6', suit: 'Hearts' }}
                 />
             )}
         </For>

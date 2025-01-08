@@ -1,10 +1,9 @@
-import Card from '~/components/Card';
+import { DEFAULT_DECK, PlayingCard, PlayingDeck } from '~/game-logic/card';
 import { createMutable } from 'solid-js/store';
-import { createResource } from 'solid-js';
+import createSSRSafe from '~/util/ssr-safe';
 import Deck from '~/components/Deck';
 import OpponentHand from '~/components/OpponentHand';
 import PlayerHand from '~/components/PlayerHand';
-import { PlayingCard } from '~/game-logic/card';
 import { shuffle } from '~/util/array';
 
 export type GameProps = {
@@ -18,45 +17,13 @@ type GameState = {
     opponentCardDrawnIndices: number[];
 };
 
-const generateStartingCards = (): PlayingCard[] => {
-    const suits = Object.freeze([
-        'Spades',
-        'Clubs',
-        'Diamonds',
-        'Hearts',
-    ] as const);
-    const values = Object.freeze([
-        'A',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        'J',
-        'Q',
-        'K',
-    ] as const);
-    const cards: PlayingCard[] = [];
-    suits.forEach((suit) => {
-        values.forEach((rank) => {
-            cards.push(Object.freeze({ rank, suit }));
-        });
-    });
-    shuffle(cards);
-    return cards;
-};
+const generateStartingCards = (): PlayingDeck => shuffle([...DEFAULT_DECK]);
 
 const Game = (props: GameProps) => {
-    const [startingDeck] = createResource(generateStartingCards, {
-        initialValue: [],
-    });
+    const startingDeck = createSSRSafe(generateStartingCards);
     const state = createMutable<GameState>(
         {
-            deck: startingDeck(),
+            deck: startingDeck,
             opponentCardDrawnIndices: [],
             opponentHand: [],
             playerHand: [],
@@ -65,7 +32,7 @@ const Game = (props: GameProps) => {
     );
     let i = 0;
     return (
-        <div class='grid h-screen grid-cols-1 grid-rows-4 gap-4'>
+        <div class='grid h-screen auto-rows-fr grid-cols-1 gap-4'>
             <OpponentHand
                 playerName='Opponent'
                 cardDrawnIndices={state.opponentCardDrawnIndices}
@@ -79,7 +46,6 @@ const Game = (props: GameProps) => {
                         state.opponentHand.push(card))
                 }
             />
-            <Card />
             <PlayerHand
                 cards={state.playerHand}
                 playerName={props.playerName}

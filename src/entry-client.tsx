@@ -2,4 +2,7 @@
 import { mount, StartClient } from '@solidjs/start/client';
 import { assertNotNull } from '~/util/not-undef';
 
-mount(() => <StartClient />, assertNotNull(document.getElementById('app')));
+mount(
+    () => <StartClient />,
+    assertNotNull(document.getElementById('app'), 'No root element found!'),
+);

@@ -1,4 +1,4 @@
-import FaceUpCard from '~/components/FaceUpCard';
+import Card from '~/components/Card';
 import { For } from 'solid-js';
 import { PlayingCard } from '~/game-logic/card';
 
@@ -17,16 +17,15 @@ const PlayerHand = (props: PlayerHandProps) => (
     <div class={`relative my-5 flex justify-center`}>
         <For each={props.cards}>
             {(card, index) => (
-                <FaceUpCard
+                <Card
+                    isFaceUp={true}
                     value={card}
+                    handIndex={undefined}
                     style={{
                         transform: `rotate(${calculateAngle(index(), props.cards.length).toString()}deg)`,
                     }}
                     class='absolute origin-bottom'
                     onClick={() => {
-                        console.log(
-                            `Player ${props.playerName} clicked on card ${card.rank} of ${card.suit}`,
-                        );
                         props.cards.splice(index(), 1);
                     }}
                 />
