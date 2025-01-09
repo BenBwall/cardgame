@@ -6,7 +6,10 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "files.eol": "\n",
-    "cSpell.words": ["backface"],
+    "cSpell.words": [
+        "backface",
+        "cardgame"
+    ],
     "[tailwindcss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },

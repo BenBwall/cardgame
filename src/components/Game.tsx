@@ -5,6 +5,7 @@ import Deck from '~/components/Deck';
 import OpponentHand from '~/components/OpponentHand';
 import PlayerHand from '~/components/PlayerHand';
 import { shuffle } from '~/util/array';
+import { TransitionGroup } from 'solid-transition-group';
 
 export type GameProps = {
     playerName: string;
@@ -33,23 +34,28 @@ const Game = (props: GameProps) => {
     let i = 0;
     return (
         <div class='grid h-screen auto-rows-fr grid-cols-1 gap-4'>
-            <OpponentHand
-                playerName='Opponent'
-                cardDrawnIndices={state.opponentCardDrawnIndices}
-            />
-            <Deck
-                cards={state.deck}
-                onCardDrawn={(card) =>
-                    i++ % 2 === 0 ?
-                        state.playerHand.push(card)
-                    :   (state.opponentCardDrawnIndices.push(i / 2),
-                        state.opponentHand.push(card))
-                }
-            />
-            <PlayerHand
-                cards={state.playerHand}
-                playerName={props.playerName}
-            />
+            <TransitionGroup
+                name='draw-card'
+                enterActiveClass='transition-opacity duration-500 ease-in-out'
+            >
+                <OpponentHand
+                    playerName='Opponent'
+                    cardDrawnIndices={state.opponentCardDrawnIndices}
+                />
+                <Deck
+                    cards={state.deck}
+                    onCardDrawn={(card) =>
+                        i++ % 2 === 0 ?
+                            state.playerHand.push(card)
+                        :   (state.opponentCardDrawnIndices.push(i / 2),
+                            state.opponentHand.push(card))
+                    }
+                />
+                <PlayerHand
+                    cards={state.playerHand}
+                    playerName={props.playerName}
+                />
+            </TransitionGroup>
         </div>
     );
 };

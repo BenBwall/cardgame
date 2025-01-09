@@ -1,5 +1,5 @@
 {
-    "name": "example-with-tailwindcss",
+    "name": "cardgame",
     "type": "module",
     "scripts": {
         "dev": "vinxi dev",
@@ -12,7 +12,7 @@
         "@tailwindcss/postcss": "^4.0.0-beta.8",
         "postcss": "^8.4.38",
         "solid-js": "^1.9.2",
-        "solid-motionone": "^1.0.3",
+        "solid-transition-group": "^0.2.3",
         "tailwindcss": "^4.0.0-beta.8",
         "vinxi": "^0.4.3"
     },
