@@ -12,7 +12,6 @@ export type GameProps = {
 };
 
 type GameState = {
-    opponentHand: PlayingCard[];
     playerHand: PlayingCard[];
     deck: PlayingCard[];
     opponentCardDrawnIndices: number[];
@@ -26,7 +25,6 @@ const Game = (props: GameProps) => {
         {
             deck: startingDeck,
             opponentCardDrawnIndices: [],
-            opponentHand: [],
             playerHand: [],
         },
         { name: 'Game State' },
@@ -47,8 +45,7 @@ const Game = (props: GameProps) => {
                     onCardDrawn={(card) =>
                         i++ % 2 === 0 ?
                             state.playerHand.push(card)
-                        :   (state.opponentCardDrawnIndices.push(i / 2),
-                            state.opponentHand.push(card))
+                        :   state.opponentCardDrawnIndices.push(i / 2)
                     }
                 />
                 <PlayerHand
