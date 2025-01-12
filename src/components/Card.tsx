@@ -51,18 +51,17 @@ export type CardProps = BaseCardProps & FaceUpCardProps & FaceDownCardProps;
 // eslint-disable-next-line arrow-body-style
 const Card = (props: CardProps) => {
     return (
-        <button
-            class={`text-black dark:text-white ${props.class ?? ''}`}
-            on:click={props.onClick}
-        >
-            <div
-                data-is-face-up={props.isFaceUp.toString()}
-                class='relative h-28 w-20 cursor-pointer transition duration-600 ease-linear transform-3d data-[is-face-up=false]:rotate-x-180'
-            >
-                <FaceUpCard {...props} />
-                <FaceDownCard {...props} />
-            </div>
-        </button>
+        <li class={`inline text-black dark:text-white ${props.class ?? ''}`}>
+            <button on:click={props.onClick}>
+                <div
+                    data-is-face-up={props.isFaceUp.toString()}
+                    class='relative h-28 w-20 cursor-pointer transition duration-600 ease-linear transform-3d data-[is-face-up=false]:rotate-x-180'
+                >
+                    <FaceUpCard {...props} />
+                    <FaceDownCard {...props} />
+                </div>
+            </button>
+        </li>
     );
 };
 

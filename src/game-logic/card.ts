@@ -1,3 +1,5 @@
+import { FixedSizeArray } from '~/util/array';
+
 export const RANKS = Object.freeze([
     'A',
     '2',
@@ -28,62 +30,9 @@ export type PlayingCard = Readonly<{
     suit: Suit;
     rank: Rank;
 }>;
-
+export const PLAYING_DECK_SIZE = 52;
 // 52 card deck. 13 ranks, 4 suits.
-export type PlayingDeck = [
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-    PlayingCard,
-];
+export type PlayingDeck = FixedSizeArray<PlayingCard, typeof PLAYING_DECK_SIZE>;
 
 export const DEFAULT_DECK: Readonly<PlayingDeck> = Object.freeze(
     SUITS.flatMap((suit) =>
