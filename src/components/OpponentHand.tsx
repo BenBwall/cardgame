@@ -1,26 +1,25 @@
-import Card from '~/components/Card';
 import { For } from 'solid-js';
+
+import FaceDownCard from '~/components/FaceDownCard';
+import { OpponentHandCardState } from '~/components/Game';
 
 export type OpponentHandProps = {
     playerName: string;
-    cardDrawnIndices: number[];
+    cardStates: OpponentHandCardState[];
 };
 
 const OpponentHand = (props: OpponentHandProps) => (
-    <div class='flex flex-row items-center justify-center'>
-        <For each={props.cardDrawnIndices}>
-            {(cardDrawnIndex, i) => (
-                <Card
-                    isFaceUp={false}
-                    handIndex={cardDrawnIndex}
-                    onClick={() => {
-                        props.cardDrawnIndices.splice(i(), 1);
-                    }}
-                    value={{ rank: '6', suit: 'Hearts' }}
+    <ol class='flex list-none flex-row items-center justify-center'>
+        <For each={props.cardStates}>
+            {(state, _) => (
+                <FaceDownCard
+                    ref={state.ref.inner}
+                    isVisible={state.isVisible}
+                    handIndex={state.index}
                 />
             )}
         </For>
-    </div>
+    </ol>
 );
 
 export default OpponentHand;

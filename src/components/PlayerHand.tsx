@@ -1,9 +1,10 @@
-import Card from '~/components/Card';
 import { For } from 'solid-js';
-import { PlayingCard } from '~/game-logic/card';
+
+import FaceUpCard from '~/components/FaceUpCard';
+import { PlayerHandCardState } from '~/components/Game';
 
 export type PlayerHandProps = {
-    cards: PlayingCard[];
+    cardStates: PlayerHandCardState[];
     playerName: string;
 };
 
@@ -14,24 +15,24 @@ const calculateAngle = (index: number, numCards: number) =>
     (CARD_CURVE_IN_DEGREES / 2 + CARD_CURVE_IN_DEGREES / numCards / 2);
 
 const PlayerHand = (props: PlayerHandProps) => (
-    <div class={`relative my-5 flex justify-center`}>
-        <For each={props.cards}>
-            {(card, index) => (
-                <Card
-                    isFaceUp={true}
-                    value={card}
-                    handIndex={undefined}
+    <ol class='relative my-5 flex list-none justify-center'>
+        <For each={props.cardStates}>
+            {(state, index) => (
+                <FaceUpCard
+                    ref={state.ref.inner}
+                    isVisible={state.isVisible}
+                    onClick={() => {
+                        props.cardStates.splice(index(), 1);
+                    }}
                     style={{
-                        transform: `rotate(${calculateAngle(index(), props.cards.length).toString()}deg)`,
+                        transform: `rotate(${calculateAngle(index(), props.cardStates.length).toString()}deg)`,
                     }}
                     class='absolute origin-bottom'
-                    onClick={() => {
-                        props.cards.splice(index(), 1);
-                    }}
+                    value={state.value}
                 />
             )}
         </For>
-    </div>
+    </ol>
 );
 
 export default PlayerHand;

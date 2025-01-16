@@ -1,5 +1,6 @@
-import { assertNotUndef } from '~/util/not-undef';
 import { createResource } from 'solid-js';
+
+import { assertNotUndef } from '~/util/not-undef';
 
 type Wrapper<T> = { value: T };
 

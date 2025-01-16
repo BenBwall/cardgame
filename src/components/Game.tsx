@@ -1,22 +1,52 @@
-import { DEFAULT_DECK, PlayingCard, PlayingDeck } from '~/game-logic/card';
 import { createMutable } from 'solid-js/store';
-import createSSRSafe from '~/util/ssr-safe';
+
 import Deck from '~/components/Deck';
-import MovingCards from './MovingCards';
+import MovingCards from '~/components/MovingCards';
 import OpponentHand from '~/components/OpponentHand';
 import PlayerHand from '~/components/PlayerHand';
+import {
+    DEFAULT_DECK,
+    isSameCard,
+    PlayingCard,
+    PlayingDeck,
+} from '~/game-logic/card';
 import { shuffle } from '~/util/array';
+import { assertNotUndef } from '~/util/not-undef';
+import createSSRSafe from '~/util/ssr-safe';
+
+export type HtmlRef<T extends HTMLElement> = { inner: T };
 
 export type GameProps = {
     playerName: string;
 };
 
+export type MovingCardState = {
+    value: PlayingCard;
+    targetElement: HtmlRef<HTMLLIElement>;
+    setIsVisible: () => void;
+};
+
+export type OpponentHandCardState = {
+    isVisible: boolean;
+    index: number;
+    ref: HtmlRef<HTMLLIElement>;
+};
+
+export type PlayerHandCardState = {
+    isVisible: boolean;
+    value: PlayingCard;
+    ref: HtmlRef<HTMLLIElement>;
+};
+
 type GameState = {
     deck: PlayingCard[];
-    movingCards: PlayingCard[];
-    opponentCardDrawnIndices: number[];
-    playerHand: PlayingCard[];
+    movingCardStates: MovingCardState[];
+    opponentHand: OpponentHandCardState[];
+    playerHand: PlayerHandCardState[];
 };
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-parameters
+const UNINIT_HTML_ELEMENT = <T extends HTMLElement>(): T => (void 0)!;
 
 const generateStartingCards = () => shuffle([...DEFAULT_DECK] as PlayingDeck);
 
@@ -25,32 +55,51 @@ const Game = (props: GameProps) => {
     const state = createMutable<GameState>(
         {
             deck: startingDeck,
-            movingCards: [],
-            opponentCardDrawnIndices: [],
+            movingCardStates: [],
+            opponentHand: [],
             playerHand: [],
         },
         { name: 'Game State' },
     );
-    let i = 0;
     return (
         <div class='grid h-screen auto-rows-fr grid-cols-1 gap-4'>
             <OpponentHand
                 playerName='Opponent'
-                cardDrawnIndices={state.opponentCardDrawnIndices}
+                cardStates={state.opponentHand}
             />
             <Deck
                 cards={state.deck}
-                onCardDrawn={(card) =>
-                    i++ % 2 === 0 ?
-                        state.playerHand.push(card)
-                    :   state.opponentCardDrawnIndices.push(i / 2)
-                }
+                onCardDrawn={(card) => {
+                    state.playerHand.push({
+                        isVisible: false,
+                        ref: { inner: UNINIT_HTML_ELEMENT() },
+                        value: card,
+                    });
+                    state.movingCardStates.push({
+                        setIsVisible: () => {
+                            const playerHandState = assertNotUndef(
+                                state.playerHand.find((c) =>
+                                    isSameCard(c.value, card),
+                                ),
+                            );
+                            playerHandState.isVisible = true;
+                        },
+                        targetElement:
+                            state.playerHand[state.playerHand.length - 1].ref,
+                        value: card,
+                    });
+                }}
             />
             <PlayerHand
-                cards={state.playerHand}
+                cardStates={state.playerHand}
                 playerName={props.playerName}
             />
-            <MovingCards cards={state.movingCards} />
+            <MovingCards
+                cards={state.movingCardStates}
+                onFinishedMoving={(index) => {
+                    state.movingCardStates.splice(index(), 1);
+                }}
+            />
         </div>
     );
 };

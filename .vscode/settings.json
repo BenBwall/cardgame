@@ -5,7 +5,8 @@
     "files.eol": "\n",
     "cSpell.words": [
         "backface",
-        "cardgame"
+        "cardgame",
+        "UNINIT"
     ],
     "[tailwindcss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"

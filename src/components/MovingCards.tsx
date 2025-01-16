@@ -1,19 +1,22 @@
-import { For } from 'solid-js';
-import { PlayingCard } from '~/game-logic/card';
+import { Accessor, For } from 'solid-js';
+
+import { MovingCardState } from '~/components/Game';
+import MovingCard from '~/components/MovingCard';
 
 export type MovingCardsProps = {
-    cards: PlayingCard[];
+    cards: MovingCardState[];
+    onFinishedMoving?: (index: Accessor<number>) => void;
 };
 
 const MovingCards = (props: MovingCardsProps) => (
     <div class='fixed right-0 bottom-0'>
         <For each={props.cards}>
-            {(card) => (
-                <div class='rounded border border-black bg-white'>
-                    <p>
-                        {card.rank} of {card.suit}
-                    </p>
-                </div>
+            {(card, index) => (
+                <MovingCard
+                    card={card.value}
+                    targetPosition={card.targetElement.inner.getBoundingClientRect()}
+                    onFinishedMoving={() => props.onFinishedMoving?.(index)}
+                />
             )}
         </For>
     </div>

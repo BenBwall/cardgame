@@ -39,3 +39,6 @@ export const DEFAULT_DECK: Readonly<PlayingDeck> = Object.freeze(
         RANKS.map((rank) => Object.freeze({ rank, suit })),
     ) as PlayingDeck,
 );
+
+export const isSameCard = (a: PlayingCard, b: PlayingCard) =>
+    a.rank === b.rank && a.suit === b.suit;
