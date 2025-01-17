@@ -40,7 +40,7 @@ export type PlayerHandCardState = {
 
 type GameState = {
     deck: PlayingCard[];
-    movingCardStates: MovingCardState[];
+    movingCards: MovingCardState[];
     opponentHand: OpponentHandCardState[];
     playerHand: PlayerHandCardState[];
 };
@@ -55,7 +55,7 @@ const Game = (props: GameProps) => {
     const state = createMutable<GameState>(
         {
             deck: startingDeck,
-            movingCardStates: [],
+            movingCards: [],
             opponentHand: [],
             playerHand: [],
         },
@@ -70,12 +70,13 @@ const Game = (props: GameProps) => {
             <Deck
                 cards={state.deck}
                 onCardDrawn={(card) => {
+                    console.log(state);
                     state.playerHand.push({
                         isVisible: false,
                         ref: { inner: UNINIT_HTML_ELEMENT() },
                         value: card,
                     });
-                    state.movingCardStates.push({
+                    state.movingCards.push({
                         setIsVisible: () => {
                             const playerHandState = assertNotUndef(
                                 state.playerHand.find((c) =>
@@ -95,9 +96,11 @@ const Game = (props: GameProps) => {
                 playerName={props.playerName}
             />
             <MovingCards
-                cards={state.movingCardStates}
+                cards={state.movingCards}
                 onFinishedMoving={(index) => {
-                    state.movingCardStates.splice(index(), 1);
+                    console.log('Finished moving card:', index());
+                    const s = state.movingCards.splice(index(), 1)[0];
+                    s.setIsVisible();
                 }}
             />
         </div>

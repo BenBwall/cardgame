@@ -23,7 +23,7 @@ const isRedSuit = (suit: Suit) => suit === 'Diamonds' || suit === 'Hearts';
 const FaceUpCard = (props: FaceUpCardProps) => (
     <li
         data-is-visible={props.isVisible.toString()}
-        class={`card-side flex flex-col items-center justify-between bg-white data-[is-visible=false]:collapse dark:border-white dark:bg-black ${props.class ?? ''}`}
+        class={`flex h-28 w-20 flex-col justify-between border border-black bg-white text-center data-[is-visible=false]:collapse dark:border-white dark:bg-black ${props.class ?? ''}`}
         style={props.style}
         ref={props.ref}
     >

@@ -9,7 +9,7 @@ export type MovingCardsProps = {
 };
 
 const MovingCards = (props: MovingCardsProps) => (
-    <div class='fixed right-0 bottom-0'>
+    <div>
         <For each={props.cards}>
             {(card, index) => (
                 <MovingCard

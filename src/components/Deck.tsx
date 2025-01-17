@@ -22,6 +22,7 @@ const Deck = (props: DeckProps) => (
                     isVisible={true}
                     onClick={() => {
                         const card = props.cards.pop();
+                        console.log('Drawn card:', card);
                         if (card !== undefined) {
                             props.onCardDrawn(card);
                         }
