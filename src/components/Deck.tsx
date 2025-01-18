@@ -4,6 +4,7 @@ import FaceDownCard from '~/components/FaceDownCard';
 import { PlayingCard } from '~/game-logic/card';
 
 export type DeckProps = {
+    ref: HTMLDivElement;
     cards: PlayingCard[];
     onCardDrawn: (card: PlayingCard) => void;
 };
@@ -15,7 +16,10 @@ const EmptyDeck = () => (
 );
 
 const Deck = (props: DeckProps) => (
-    <div class='content-center rounded bg-green-500 text-center dark:bg-green-700'>
+    <div
+        ref={props.ref}
+        class='content-center rounded bg-green-500 text-center dark:bg-green-700'
+    >
         <div class='bg-green-700 dark:bg-green-500'>
             <Show when={props.cards.length > 0} fallback={<EmptyDeck />}>
                 <FaceDownCard

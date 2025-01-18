@@ -23,7 +23,6 @@ export type GameProps = {
 export type MovingCardState = {
     value: PlayingCard;
     targetElement: HtmlRef<HTMLLIElement>;
-    setIsVisible: () => void;
 };
 
 export type OpponentHandCardState = {
@@ -52,6 +51,7 @@ const generateStartingCards = () => shuffle([...DEFAULT_DECK] as PlayingDeck);
 
 const Game = (props: GameProps) => {
     const startingDeck = createSSRSafe(generateStartingCards);
+    let deckRef!: HTMLDivElement;
     const state = createMutable<GameState>(
         {
             deck: startingDeck,
@@ -68,23 +68,15 @@ const Game = (props: GameProps) => {
                 cardStates={state.opponentHand}
             />
             <Deck
+                ref={deckRef}
                 cards={state.deck}
                 onCardDrawn={(card) => {
-                    console.log(state);
                     state.playerHand.push({
                         isVisible: false,
                         ref: { inner: UNINIT_HTML_ELEMENT() },
                         value: card,
                     });
                     state.movingCards.push({
-                        setIsVisible: () => {
-                            const playerHandState = assertNotUndef(
-                                state.playerHand.find((c) =>
-                                    isSameCard(c.value, card),
-                                ),
-                            );
-                            playerHandState.isVisible = true;
-                        },
                         targetElement:
                             state.playerHand[state.playerHand.length - 1].ref,
                         value: card,
@@ -96,11 +88,16 @@ const Game = (props: GameProps) => {
                 playerName={props.playerName}
             />
             <MovingCards
+                deckPosition={deckRef.getBoundingClientRect()}
                 cards={state.movingCards}
                 onFinishedMoving={(index) => {
-                    console.log('Finished moving card:', index());
                     const s = state.movingCards.splice(index(), 1)[0];
-                    s.setIsVisible();
+                    const playerHandState = assertNotUndef(
+                        state.playerHand.find((c) =>
+                            isSameCard(c.value, s.value),
+                        ),
+                    );
+                    playerHandState.isVisible = true;
                 }}
             />
         </div>

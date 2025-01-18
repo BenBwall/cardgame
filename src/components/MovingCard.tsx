@@ -3,7 +3,6 @@ import { onMount } from 'solid-js';
 import FaceDownCard from '~/components/FaceDownCard';
 import FaceUpCard from '~/components/FaceUpCard';
 import { PlayingCard } from '~/game-logic/card';
-import inspect from '~/util/inspect';
 import { Position2d } from '~/util/position';
 
 type DoubleFacedCardProps = {
@@ -23,6 +22,7 @@ const DoubleFacedCard = (props: DoubleFacedCardProps) => {
 };
 
 export type MovingCardProps = {
+    startPosition: Position2d;
     targetPosition: Position2d;
     card: PlayingCard;
     onFinishedMoving: () => void;
@@ -30,12 +30,8 @@ export type MovingCardProps = {
 
 const MovingCard = (props: MovingCardProps) => {
     let ref!: HTMLDivElement;
-    const xOffset = () =>
-        inspect(ref.getBoundingClientRect().x, 'getBoundingClientRect().x') -
-        inspect(props.targetPosition.x, 'props.targetPosition.x');
-    const yOffset = () =>
-        inspect(ref.getBoundingClientRect().y, 'getBoundingClientRect().y') -
-        inspect(props.targetPosition.y, 'props.targetPosition.y');
+    const xOffset = () => props.startPosition.x - props.targetPosition.x;
+    const yOffset = () => props.startPosition.y - props.targetPosition.y;
     const rotationOffset = () => props.targetPosition.rotation ?? 0;
     onMount(() => {
         const ANIMATION_DURATION = 1000;
