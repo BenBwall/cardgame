@@ -1,10 +1,11 @@
+import '~/util/find-index-and-value';
+
 import { Accessor, For } from 'solid-js';
 
-import { PlayerHandCardState } from '~/components/Game';
+import { PlayerHandCardState } from '~/components/GameStateProvider';
 import MovingCard from '~/components/MovingCard';
 import { calculateAngle, cardCurve } from '~/components/PlayerHand';
 import { PlayingCard } from '~/game-logic/card';
-import findIndexAndValue from '~/util/find-index-and-value';
 import { assertNotUndef } from '~/util/not-undef';
 import { Position2d } from '~/util/position';
 
@@ -22,7 +23,7 @@ const MovingCards = (props: MovingCardsProps) => {
         playerHand: PlayerHandCardState[],
     ) => {
         const [state, index] = assertNotUndef(
-            findIndexAndValue(playerHand, (c) => c.value === card),
+            playerHand.findIndexAndValue((c) => c.value === card),
             'Card not found in player hand',
         );
 

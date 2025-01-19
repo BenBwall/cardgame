@@ -10,7 +10,7 @@ type FaceUpCardProps = {
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
     isVisible: boolean;
-    ref?: HTMLLIElement;
+    ref?: HTMLElement;
 };
 
 const suitSymbols = Object.freeze({
@@ -23,34 +23,34 @@ const suitSymbols = Object.freeze({
 const isRedSuit = (suit: Suit) => suit === 'Diamonds' || suit === 'Hearts';
 
 const FaceUpCard = (props: FaceUpCardProps) => (
-    <li ref={props.ref}>
-        <button
-            on:mouseenter={() => {
-                props.onMouseEnter?.();
-            }}
-            on:mouseleave={() => {
-                props.onMouseLeave?.();
-            }}
-            data-is-visible={props.isVisible.toString()}
-            class={`flex h-28 w-20 flex-col items-center justify-between border border-black bg-white text-center text-xl font-bold hover:text-4xl data-[is-visible=false]:collapse dark:border-white dark:bg-black ${props.class ?? ''}`}
-            style={props.style}
-            on:click={() => {
-                props.onClick?.();
-            }}
+    <button
+        ref={props.ref as HTMLButtonElement}
+        id={`face-up-card-${props.value.rank}-${props.value.suit}`}
+        on:mouseenter={() => {
+            props.onMouseEnter?.();
+        }}
+        on:mouseleave={() => {
+            props.onMouseLeave?.();
+        }}
+        on:click={() => {
+            props.onClick?.();
+        }}
+        data-is-visible={props.isVisible.toString()}
+        class={`flex h-28 w-20 flex-col items-center justify-between border border-black bg-white p-2 text-xl font-bold data-[is-visible=false]:collapse dark:border-white dark:bg-black ${props.class ?? ''}`}
+        style={props.style}
+    >
+        <div class='card-text'>{props.value.rank}</div>
+        <div
+            class={`${
+                isRedSuit(props.value.suit) ? 'text-red-500' : (
+                    'text-black dark:text-gray-600'
+                )
+            } card-text`}
         >
-            <div class='card-text'>{props.value.rank}</div>
-            <div
-                class={`${
-                    isRedSuit(props.value.suit) ? 'text-red-500' : (
-                        'text-black dark:text-gray-600'
-                    )
-                } card-text`}
-            >
-                {suitSymbols[props.value.suit]}
-            </div>
-            <div class='card-text rotate-180'>{props.value.rank}</div>
-        </button>
-    </li>
+            {suitSymbols[props.value.suit]}
+        </div>
+        <div class='card-text rotate-180'>{props.value.rank}</div>
+    </button>
 );
 
 export default FaceUpCard;

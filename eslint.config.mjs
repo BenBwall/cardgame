@@ -115,7 +115,7 @@ export default [
             'no-else-return': 'error',
             'no-empty-function': 'error',
             'no-eval': 'error',
-            'no-extend-native': 'error',
+            'no-extend-native': 'off',
             'no-extra-bind': 'error',
             'no-extra-label': 'error',
             'no-implied-eval': 'error',

@@ -1,7 +1,7 @@
 import { For } from 'solid-js';
 
 import FaceDownCard from '~/components/FaceDownCard';
-import { OpponentHandCardState } from '~/components/Game';
+import { OpponentHandCardState } from '~/components/GameStateProvider';
 
 export type OpponentHandProps = {
     playerName: string;

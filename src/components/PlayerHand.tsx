@@ -1,7 +1,7 @@
 import { For } from 'solid-js';
 
 import FaceUpCard from '~/components/FaceUpCard';
-import { PlayerHandCardState } from '~/components/Game';
+import { PlayerHandCardState } from '~/components/GameStateProvider';
 
 export type PlayerHandProps = {
     cardStates: PlayerHandCardState[];
@@ -25,7 +25,7 @@ export const cardCurve = (numHovered: number) =>
     :   BASE_CARD_CURVE_IN_DEGREES;
 
 const PlayerHand = (props: PlayerHandProps) => (
-    <ul class='relative my-5 flex justify-center hover:p-5'>
+    <ul class='flex justify-center'>
         <For each={props.cardStates}>
             {(state, index) => (
                 <FaceUpCard
@@ -45,7 +45,7 @@ const PlayerHand = (props: PlayerHandProps) => (
                     style={{
                         transform: `rotate(${calculateAngle(index(), props.cardStates.length, cardCurve(props.numHovered)).toString()}deg)`,
                     }}
-                    class='absolute origin-bottom transition-transform duration-300 ease-out hover:scale-150 hover:*:[.card-text]:scale-75'
+                    class='absolute origin-bottom transition-transform duration-300 ease-out hover:scale-150'
                     value={state.value}
                 />
             )}

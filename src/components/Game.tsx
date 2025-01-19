@@ -1,54 +1,21 @@
 import { createMutable } from 'solid-js/store';
 
 import Deck from '~/components/Deck';
+import { GameState } from '~/components/GameStateProvider';
 import MovingCards from '~/components/MovingCards';
 import OpponentHand from '~/components/OpponentHand';
 import PlayerHand from '~/components/PlayerHand';
-import {
-    DEFAULT_DECK,
-    isSameCard,
-    PlayingCard,
-    PlayingDeck,
-} from '~/game-logic/card';
+import { DEFAULT_DECK, isSameCard, PlayingDeck } from '~/game-logic/card';
 import { shuffle } from '~/util/array';
 import { assertNotUndef } from '~/util/not-undef';
 import createSSRSafe from '~/util/ssr-safe';
-
-export type HtmlRef<T extends HTMLElement> = { inner: T };
 
 export type GameProps = {
     playerName: string;
 };
 
-export type OpponentHandCardState = {
-    isVisible: boolean;
-    index: number;
-    ref: HtmlRef<HTMLLIElement>;
-};
-
-export type PlayerHandCardState = {
-    isVisible: boolean;
-    isHovered: boolean;
-    value: PlayingCard;
-    ref: HtmlRef<HTMLLIElement>;
-};
-
-export type PlayerHandState = {
-    cards: PlayerHandCardState[];
-    numHovered: number;
-};
-
-export type GameState = {
-    deck: PlayingCard[];
-    movingCards: PlayingCard[];
-    opponentHand: OpponentHandCardState[];
-    playerHand: PlayerHandState;
-};
-
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-parameters
 const UNINIT_HTML_ELEMENT = <T extends HTMLElement>(): T => (void 0)!;
-
-const generateStartingCards = () => shuffle([...DEFAULT_DECK] as PlayingDeck);
 
 const Game = (props: GameProps) => {
     const startingDeck = createSSRSafe(generateStartingCards);

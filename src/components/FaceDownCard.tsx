@@ -1,25 +1,26 @@
+import { JSX } from 'solid-js';
+
 type FaceDownCardProps = {
     handIndex?: number;
     isVisible: boolean;
-    ref?: HTMLLIElement;
+    ref?: HTMLElement;
     onClick?: () => void;
+    class?: string | undefined;
+    style?: JSX.CSSProperties | string | undefined;
 };
 
 const FaceDownCard = (props: FaceDownCardProps) => (
-    <li
+    <button
         data-is-visible={props.isVisible.toString()}
-        class='flex bg-blue-500 hover:cursor-pointer data-[is-visible=false]:collapse dark:bg-blue-700'
-        ref={props.ref}
+        class={`flex h-28 w-20 bg-blue-500 hover:cursor-pointer data-[is-visible=false]:collapse dark:bg-blue-700 ${props.class ?? ''}`}
+        style={props.style}
+        ref={props.ref as HTMLButtonElement}
+        on:click={() => {
+            props.onClick?.();
+        }}
     >
-        <button
-            class='h-28 w-20'
-            on:click={() => {
-                props.onClick?.();
-            }}
-        >
-            {props.handIndex}
-        </button>
-    </li>
+        {props.handIndex}
+    </button>
 );
 
 export default FaceDownCard;

@@ -1,4 +1,4 @@
-import { createEffect, onCleanup } from 'solid-js';
+import { createEffect, onCleanup, onMount } from 'solid-js';
 
 import FaceDownCard from '~/components/FaceDownCard';
 import FaceUpCard from '~/components/FaceUpCard';
@@ -9,15 +9,40 @@ type DoubleFacedCardProps = {
     card: PlayingCard;
 };
 
-// eslint-disable-next-line arrow-body-style
 const DoubleFacedCard = (props: DoubleFacedCardProps) => {
+    let rootRef!: HTMLElement;
+    const DURATION = 1000;
+    onMount(() => {
+        rootRef.animate(
+            [
+                {
+                    transform: 'rotateX(0deg)',
+                },
+                {
+                    transform: 'rotateX(180deg)',
+                },
+            ],
+            {
+                duration: DURATION,
+                easing: 'linear',
+            },
+        );
+    });
     return (
-        <li class='inline text-black dark:text-white'>
-            <div class='relative h-28 w-20 rotate-x-180 cursor-pointer transition duration-1000 ease-linear transform-3d'>
-                <FaceUpCard value={props.card} isVisible={true} />
-                <FaceDownCard isVisible={true} />
-            </div>
-        </li>
+        <div
+            ref={rootRef as HTMLDivElement}
+            class='h-28 w-20 rotate-x-180 cursor-pointer transition duration-1000 ease-linear transform-3d'
+        >
+            <FaceUpCard
+                value={props.card}
+                isVisible={true}
+                class={'absolute top-0 left-0 z-2 rotate-x-180 backface-hidden'}
+            />
+            <FaceDownCard
+                isVisible={true}
+                class='absolute top-0 left-0 backface-hidden'
+            />
+        </div>
     );
 };
 
@@ -67,7 +92,7 @@ const MovingCard = (props: MovingCardProps) => {
     return (
         <div
             ref={ref}
-            class='fixed'
+            class='absolute'
             style={{
                 left: `${props.targetPosition.x.toString()}px`,
                 top: `${props.targetPosition.y.toString()}px`,

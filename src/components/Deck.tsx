@@ -4,7 +4,7 @@ import FaceDownCard from '~/components/FaceDownCard';
 import { PlayingCard } from '~/game-logic/card';
 
 export type DeckProps = {
-    ref: HTMLLIElement;
+    ref: HTMLElement;
     cards: PlayingCard[];
     onCardDrawn: (card: PlayingCard) => void;
 };
