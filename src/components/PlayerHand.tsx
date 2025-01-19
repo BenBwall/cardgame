@@ -6,16 +6,26 @@ import { PlayerHandCardState } from '~/components/Game';
 export type PlayerHandProps = {
     cardStates: PlayerHandCardState[];
     playerName: string;
+    numHovered: number;
+    setNumHovered: (num: number) => void;
 };
 
-const CARD_CURVE_IN_DEGREES = 270;
+const BASE_CARD_CURVE_IN_DEGREES = 270;
+const CURVE_MULTIPLIER = 1.5;
 
-const calculateAngle = (index: number, numCards: number) =>
-    (CARD_CURVE_IN_DEGREES / numCards) * (index + 1) -
-    (CARD_CURVE_IN_DEGREES / 2 + CARD_CURVE_IN_DEGREES / numCards / 2);
+export const calculateAngle = (
+    index: number,
+    numCards: number,
+    curve: number,
+) => (curve / numCards) * (index + 1) - (curve / 2 + curve / numCards / 2);
+
+export const cardCurve = (numHovered: number) =>
+    numHovered > 0 ?
+        BASE_CARD_CURVE_IN_DEGREES * CURVE_MULTIPLIER
+    :   BASE_CARD_CURVE_IN_DEGREES;
 
 const PlayerHand = (props: PlayerHandProps) => (
-    <ol class='relative my-5 flex list-none justify-center'>
+    <ul class='relative my-5 flex justify-center hover:p-5'>
         <For each={props.cardStates}>
             {(state, index) => (
                 <FaceUpCard
@@ -24,15 +34,23 @@ const PlayerHand = (props: PlayerHandProps) => (
                     onClick={() => {
                         props.cardStates.splice(index(), 1);
                     }}
-                    style={{
-                        transform: `rotate(${calculateAngle(index(), props.cardStates.length).toString()}deg)`,
+                    onMouseEnter={() => {
+                        state.isHovered = true;
+                        props.setNumHovered(props.numHovered + 1);
                     }}
-                    class='absolute origin-bottom'
+                    onMouseLeave={() => {
+                        state.isHovered = false;
+                        props.setNumHovered(props.numHovered - 1);
+                    }}
+                    style={{
+                        transform: `rotate(${calculateAngle(index(), props.cardStates.length, cardCurve(props.numHovered)).toString()}deg)`,
+                    }}
+                    class='absolute origin-bottom transition-transform duration-300 ease-out hover:scale-150 hover:*:[.card-text]:scale-75'
                     value={state.value}
                 />
             )}
         </For>
-    </ol>
+    </ul>
 );
 
 export default PlayerHand;

@@ -7,6 +7,8 @@ type FaceUpCardProps = {
     class?: string | undefined;
     style?: JSX.CSSProperties | string | undefined;
     onClick?: () => void;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
     isVisible: boolean;
     ref?: HTMLLIElement;
 };
@@ -21,19 +23,33 @@ const suitSymbols = Object.freeze({
 const isRedSuit = (suit: Suit) => suit === 'Diamonds' || suit === 'Hearts';
 
 const FaceUpCard = (props: FaceUpCardProps) => (
-    <li
-        data-is-visible={props.isVisible.toString()}
-        class={`flex h-28 w-20 flex-col justify-between border border-black bg-white text-center data-[is-visible=false]:collapse dark:border-white dark:bg-black ${props.class ?? ''}`}
-        style={props.style}
-        ref={props.ref}
-    >
-        <div class='text-xl font-bold'>{props.value.rank}</div>
-        <div
-            class={`text-xl ${isRedSuit(props.value.suit) ? 'text-red-500' : 'text-black dark:text-gray-600'}`}
+    <li ref={props.ref}>
+        <button
+            on:mouseenter={() => {
+                props.onMouseEnter?.();
+            }}
+            on:mouseleave={() => {
+                props.onMouseLeave?.();
+            }}
+            data-is-visible={props.isVisible.toString()}
+            class={`flex h-28 w-20 flex-col items-center justify-between border border-black bg-white text-center text-xl font-bold hover:text-4xl data-[is-visible=false]:collapse dark:border-white dark:bg-black ${props.class ?? ''}`}
+            style={props.style}
+            on:click={() => {
+                props.onClick?.();
+            }}
         >
-            {suitSymbols[props.value.suit]}
-        </div>
-        <div class='rotate-180 text-xl font-bold'>{props.value.rank}</div>
+            <div class='card-text'>{props.value.rank}</div>
+            <div
+                class={`${
+                    isRedSuit(props.value.suit) ? 'text-red-500' : (
+                        'text-black dark:text-gray-600'
+                    )
+                } card-text`}
+            >
+                {suitSymbols[props.value.suit]}
+            </div>
+            <div class='card-text rotate-180'>{props.value.rank}</div>
+        </button>
     </li>
 );
 

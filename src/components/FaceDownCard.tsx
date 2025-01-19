@@ -8,7 +8,7 @@ type FaceDownCardProps = {
 const FaceDownCard = (props: FaceDownCardProps) => (
     <li
         data-is-visible={props.isVisible.toString()}
-        class='flex place-self-center bg-blue-500 data-[is-visible=false]:collapse dark:bg-blue-700'
+        class='flex bg-blue-500 hover:cursor-pointer data-[is-visible=false]:collapse dark:bg-blue-700'
         ref={props.ref}
     >
         <button

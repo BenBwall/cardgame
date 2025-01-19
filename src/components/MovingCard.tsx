@@ -1,4 +1,4 @@
-import { onMount } from 'solid-js';
+import { createEffect, onCleanup } from 'solid-js';
 
 import FaceDownCard from '~/components/FaceDownCard';
 import FaceUpCard from '~/components/FaceUpCard';
@@ -30,27 +30,38 @@ export type MovingCardProps = {
 
 const MovingCard = (props: MovingCardProps) => {
     let ref!: HTMLDivElement;
-    const xOffset = () => props.startPosition.x - props.targetPosition.x;
-    const yOffset = () => props.startPosition.y - props.targetPosition.y;
-    const rotationOffset = () => props.targetPosition.rotation ?? 0;
-    onMount(() => {
-        const ANIMATION_DURATION = 1000;
+    const xDiff = props.startPosition.x - props.targetPosition.x;
+    const yDiff = props.startPosition.y - props.targetPosition.y;
+    let currentTransform = `translate(${xDiff.toString()}px, ${yDiff.toString()}px) rotate(0deg)`;
+    const BASE_DURATION = 1000;
+    let duration = BASE_DURATION;
+    createEffect(() => {
+        const rotation = props.targetPosition.rotation ?? 0;
         const player = ref.animate(
             [
                 {
-                    transform: `translate(${xOffset().toString()}px, ${yOffset().toString()}px) rotate(0deg)`,
+                    transform: currentTransform,
                 },
                 {
-                    transform: `translate(0px, 0px) rotate(${rotationOffset().toString()}deg)`,
+                    transform: `translate(0px, 0px) rotate(${rotation.toString()}deg)`,
                 },
             ],
             {
-                duration: ANIMATION_DURATION,
-                easing: 'linear',
+                duration,
+                easing: 'ease-in-out',
             },
         );
-        player.addEventListener('finish', () => {
+        const listener = () => {
             props.onFinishedMoving();
+        };
+        player.addEventListener('finish', listener);
+        onCleanup(() => {
+            player.pause();
+            duration =
+                BASE_DURATION - Number(player.currentTime ?? BASE_DURATION);
+            currentTransform = getComputedStyle(ref).transform;
+            player.removeEventListener('finish', listener);
+            player.cancel();
         });
     });
     return (
@@ -60,9 +71,6 @@ const MovingCard = (props: MovingCardProps) => {
             style={{
                 left: `${props.targetPosition.x.toString()}px`,
                 top: `${props.targetPosition.y.toString()}px`,
-            }}
-            on:transitionend={() => {
-                props.onFinishedMoving();
             }}
         >
             <DoubleFacedCard card={props.card} />

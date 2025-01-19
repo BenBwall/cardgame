@@ -20,11 +20,6 @@ export type GameProps = {
     playerName: string;
 };
 
-export type MovingCardState = {
-    value: PlayingCard;
-    targetElement: HtmlRef<HTMLLIElement>;
-};
-
 export type OpponentHandCardState = {
     isVisible: boolean;
     index: number;
@@ -33,15 +28,21 @@ export type OpponentHandCardState = {
 
 export type PlayerHandCardState = {
     isVisible: boolean;
+    isHovered: boolean;
     value: PlayingCard;
     ref: HtmlRef<HTMLLIElement>;
 };
 
-type GameState = {
+export type PlayerHandState = {
+    cards: PlayerHandCardState[];
+    numHovered: number;
+};
+
+export type GameState = {
     deck: PlayingCard[];
-    movingCards: MovingCardState[];
+    movingCards: PlayingCard[];
     opponentHand: OpponentHandCardState[];
-    playerHand: PlayerHandCardState[];
+    playerHand: PlayerHandState;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-parameters
@@ -51,13 +52,13 @@ const generateStartingCards = () => shuffle([...DEFAULT_DECK] as PlayingDeck);
 
 const Game = (props: GameProps) => {
     const startingDeck = createSSRSafe(generateStartingCards);
-    let deckRef!: HTMLDivElement;
+    let deckRef!: HTMLLIElement;
     const state = createMutable<GameState>(
         {
             deck: startingDeck,
             movingCards: [],
             opponentHand: [],
-            playerHand: [],
+            playerHand: { cards: [], numHovered: 0 },
         },
         { name: 'Game State' },
     );
@@ -71,34 +72,35 @@ const Game = (props: GameProps) => {
                 ref={deckRef}
                 cards={state.deck}
                 onCardDrawn={(card) => {
-                    state.playerHand.push({
+                    state.playerHand.cards.push({
+                        isHovered: false,
                         isVisible: false,
                         ref: { inner: UNINIT_HTML_ELEMENT() },
                         value: card,
                     });
-                    state.movingCards.push({
-                        targetElement:
-                            state.playerHand[state.playerHand.length - 1].ref,
-                        value: card,
-                    });
+                    state.movingCards.push(card);
                 }}
             />
             <PlayerHand
-                cardStates={state.playerHand}
+                cardStates={state.playerHand.cards}
+                numHovered={state.playerHand.numHovered}
                 playerName={props.playerName}
+                setNumHovered={(num) => (state.playerHand.numHovered = num)}
             />
             <MovingCards
                 deckPosition={deckRef.getBoundingClientRect()}
                 cards={state.movingCards}
+                playerHand={state.playerHand.cards}
                 onFinishedMoving={(index) => {
                     const s = state.movingCards.splice(index(), 1)[0];
                     const playerHandState = assertNotUndef(
-                        state.playerHand.find((c) =>
-                            isSameCard(c.value, s.value),
+                        state.playerHand.cards.find((c) =>
+                            isSameCard(c.value, s),
                         ),
                     );
                     playerHandState.isVisible = true;
                 }}
+                numHovered={state.playerHand.numHovered}
             />
         </div>
     );
