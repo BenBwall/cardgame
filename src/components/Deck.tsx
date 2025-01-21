@@ -2,10 +2,10 @@ import { Show } from 'solid-js';
 
 import FaceDownCard from '~/components/FaceDownCard';
 import { PlayingCard } from '~/game-logic/card';
+import useGameState from '~/game-logic/game-state';
 
 export type DeckProps = {
     ref: HTMLElement;
-    cards: PlayingCard[];
     onCardDrawn: (card: PlayingCard) => void;
 };
 
@@ -15,23 +15,26 @@ const EmptyDeck = () => (
     </div>
 );
 
-const Deck = (props: DeckProps) => (
-    <div class='content-center rounded bg-green-500 text-center dark:bg-green-700'>
-        <div class='place-items-end bg-green-700 dark:bg-green-500'>
-            <Show when={props.cards.length > 0} fallback={<EmptyDeck />}>
-                <FaceDownCard
-                    ref={props.ref}
-                    isVisible={true}
-                    onClick={() => {
-                        const card = props.cards.pop();
-                        if (card !== undefined) {
-                            props.onCardDrawn(card);
-                        }
-                    }}
-                />
-            </Show>
+const Deck = (props: DeckProps) => {
+    const state = useGameState();
+    return (
+        <div class='content-center rounded bg-green-500 text-center dark:bg-green-700'>
+            <div class='place-items-end bg-green-700 dark:bg-green-500'>
+                <Show when={state.deckHasCards()} fallback={<EmptyDeck />}>
+                    <FaceDownCard
+                        ref={props.ref}
+                        isVisible={true}
+                        onClick={() => {
+                            const card = state.drawCard();
+                            if (card !== undefined) {
+                                props.onCardDrawn(card);
+                            }
+                        }}
+                    />
+                </Show>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default Deck;

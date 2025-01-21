@@ -1,6 +1,9 @@
 declare global {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     interface Array<T> {
+        /**
+         * Wrapper around findIndex that also returns the value at the index. Returns undefined if no value is found.
+         */
         findIndexAndValue(
             this: T[],
             predicate: (value: T, index: number, array: T[]) => boolean,
