@@ -36,9 +36,13 @@
         "eslint-plugin-sort-keys-plus": "^1.4.0",
         "globals": "^15.14.0",
         "jiti": "^2.4.2",
+        "postcss-nested": "^7.0.2",
         "prettier": "^3.4.2",
         "prettier-plugin-tailwindcss": "^0.6.11",
         "ts-node": "^10.9.2",
         "typescript-eslint": "^8.21.0"
-    }
+    },
+    "browserslist": [
+        "fully supports css-nesting"
+    ]
 }
