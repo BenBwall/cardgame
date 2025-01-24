@@ -117,8 +117,11 @@ const GameStateContext = createContext<GameStateMethods>(undefined, {
     name: 'Game State Context',
 });
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const useGameState = () => useContext(GameStateContext)!;
+const useGameState = () =>
+    assertNotUndef(
+        useContext(GameStateContext),
+        'useGameState must be used within a GameStateProvider',
+    );
 
 export const GameStateContextProvider = GameStateContext.Provider;
 

@@ -5,19 +5,22 @@ import { FileRoutes } from '@solidjs/start/router';
 import { Suspense } from 'solid-js';
 
 import GameStateProvider from '~/components/GameStateProvider';
+import ThemeProvider from '~/components/ThemeProvider';
 
 const App = () => (
-    <GameStateProvider>
-        <Router
-            root={(props) => (
-                <>
-                    <Suspense>{props.children}</Suspense>
-                </>
-            )}
-        >
-            <FileRoutes />
-        </Router>
-    </GameStateProvider>
+    <Router
+        root={(props) => (
+            <>
+                <GameStateProvider>
+                    <ThemeProvider>
+                        <Suspense>{props.children}</Suspense>
+                    </ThemeProvider>
+                </GameStateProvider>
+            </>
+        )}
+    >
+        <FileRoutes />
+    </Router>
 );
 
 export default App;
