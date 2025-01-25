@@ -7,6 +7,7 @@ import useGameState from '~/game-logic/game-state';
 export type DeckProps = {
     ref: HTMLElement;
     onCardDrawn: (card: PlayingCard) => void;
+    class?: string | undefined;
 };
 
 const EmptyDeck = () => (
@@ -18,7 +19,9 @@ const EmptyDeck = () => (
 const Deck = (props: DeckProps) => {
     const state = useGameState();
     return (
-        <div class='content-center rounded bg-green-500 text-center dark:bg-green-700'>
+        <div
+            class={`content-center rounded bg-green-500 text-center dark:bg-green-700 ${props.class ?? ''}`}
+        >
             <div class='place-items-end bg-green-700 dark:bg-green-500'>
                 <Show when={state.deckHasCards()} fallback={<EmptyDeck />}>
                     <FaceDownCard

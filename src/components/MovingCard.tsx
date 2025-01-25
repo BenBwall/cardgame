@@ -90,16 +90,18 @@ const MovingCard = (props: MovingCardProps) => {
         });
     });
     return (
-        <div
-            ref={ref}
-            class='absolute'
-            style={{
-                left: `${props.targetPosition.x.toString()}px`,
-                top: `${props.targetPosition.y.toString()}px`,
-            }}
-        >
-            <DoubleFacedCard card={props.card} />
-        </div>
+        <li class='contents'>
+            <div
+                ref={ref}
+                class='fixed box-border'
+                style={{
+                    left: `${props.targetPosition.x.toString()}px`,
+                    top: `${props.targetPosition.y.toString()}px`,
+                }}
+            >
+                <DoubleFacedCard card={props.card} />
+            </div>
+        </li>
     );
 };
 

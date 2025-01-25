@@ -1,2 +1,9 @@
 @import 'tailwindcss';
+
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+    * {
+        @apply transition-colors duration-500 ease-out
+    }
+}

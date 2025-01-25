@@ -10,17 +10,19 @@ type FaceDownCardProps = {
 };
 
 const FaceDownCard = (props: FaceDownCardProps) => (
-    <button
-        data-is-visible={props.isVisible.toString()}
-        class={`flex h-28 w-20 bg-blue-500 hover:cursor-pointer data-[is-visible=false]:collapse dark:bg-blue-700 ${props.class ?? ''}`}
-        style={props.style}
-        ref={props.ref as HTMLButtonElement}
-        on:click={() => {
-            props.onClick?.();
-        }}
-    >
-        {props.handIndex}
-    </button>
+    <li class='contents'>
+        <button
+            data-is-visible={props.isVisible.toString()}
+            class={`box-border flex h-28 w-20 bg-blue-500 hover:cursor-pointer data-[is-visible=false]:collapse dark:bg-blue-700 ${props.class ?? ''}`}
+            style={props.style}
+            ref={props.ref as HTMLButtonElement}
+            on:click={() => {
+                props.onClick?.();
+            }}
+        >
+            {props.handIndex}
+        </button>
+    </li>
 );
 
 export default FaceDownCard;

@@ -11,6 +11,7 @@ import { Position2d } from '~/util/position';
 export type MovingCardsProps = {
     onFinishedMoving?: (index: Accessor<number>) => void;
     deckPosition: Position2d;
+    class?: string | undefined;
 };
 
 const MovingCards = (props: MovingCardsProps) => {
@@ -27,12 +28,12 @@ const MovingCards = (props: MovingCardsProps) => {
 
         return {
             rotation,
-            x: pos.x,
-            y: pos.y,
+            x: pos.left,
+            y: pos.top,
         };
     };
     return (
-        <div>
+        <ul class={props.class ?? ''}>
             <For each={state.movingCards()}>
                 {(card, index) => (
                     <MovingCard
@@ -43,7 +44,7 @@ const MovingCards = (props: MovingCardsProps) => {
                     />
                 )}
             </For>
-        </div>
+        </ul>
     );
 };
 

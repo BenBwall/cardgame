@@ -4,25 +4,34 @@ import '~/util/remove-at';
 import { createContext, useContext } from 'solid-js';
 
 import { HtmlRef } from '~/components/Game';
-import { isSameCard, PlayingCard } from '~/game-logic/card';
+import {
+    CardSortConfig,
+    compareCards,
+    DEFAULT_DECK,
+    isSameCard,
+    PlayingCard,
+    PlayingDeck,
+} from '~/game-logic/card';
+import { shuffle } from '~/util/array';
 import { assertNotUndef } from '~/util/not-undef';
+import createSSRSafe from '~/util/ssr-safe';
 
 export type OpponentHandCardState = {
     isVisible: boolean;
     index: number;
-    ref: HtmlRef<HTMLLIElement>;
+    ref: HtmlRef<HTMLElement>;
 };
 
 export type PlayerHandCardState = {
     isVisible: boolean;
-    isHovered: boolean;
     value: PlayingCard;
-    ref: HtmlRef<HTMLLIElement>;
+    ref: HtmlRef<HTMLElement>;
 };
 
 export type PlayerHandState = {
     cards: PlayerHandCardState[];
-    numHovered: number;
+    hoveredCardIndex: number;
+    sortConfig: CardSortConfig | undefined;
 };
 
 export type GameState = {
@@ -32,18 +41,27 @@ export type GameState = {
     playerHand: PlayerHandState;
 };
 
+const generateStartingCards = () => shuffle([...DEFAULT_DECK] as PlayingDeck);
+
+export const defaultGameState = (): GameState => ({
+    deck: createSSRSafe(generateStartingCards),
+    movingCards: [],
+    opponentHand: [],
+    playerHand: { cards: [], hoveredCardIndex: -1, sortConfig: undefined },
+});
+
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-parameters
 const UNINIT_HTML_ELEMENT = <T extends HTMLElement>(): T => (void 0)!;
 
 const BASE_CARD_CURVE_IN_DEGREES = 270;
-const CURVE_MULTIPLIER = 1.5;
+const HOVERED_CARD_CURVE_IN_DEGREES = 450;
 
 const calculateAngle = (index: number, numCards: number, curve: number) =>
     (curve / numCards) * (index + 1) - (curve / 2 + curve / numCards / 2);
 
-const cardCurve = (numHovered: number) =>
-    numHovered > 0 ?
-        BASE_CARD_CURVE_IN_DEGREES * CURVE_MULTIPLIER
+const cardCurve = (index: number, hoveredCardIndex: number) =>
+    hoveredCardIndex !== -1 && hoveredCardIndex !== index ?
+        HOVERED_CARD_CURVE_IN_DEGREES
     :   BASE_CARD_CURVE_IN_DEGREES;
 
 export class GameStateMethods {
@@ -56,11 +74,16 @@ export class GameStateMethods {
     }
     playerDrawnCard(card: PlayingCard) {
         this.#state.playerHand.cards.push({
-            isHovered: false,
             isVisible: false,
             ref: { inner: UNINIT_HTML_ELEMENT() },
             value: card,
         });
+        const sortConfig = this.#state.playerHand.sortConfig;
+        if (sortConfig !== undefined) {
+            this.#state.playerHand.cards.sort((a, b) =>
+                compareCards(a.value, b.value, sortConfig),
+            );
+        }
         this.#state.movingCards.push(card);
     }
     deckHasCards() {
@@ -76,18 +99,16 @@ export class GameStateMethods {
         this.#state.playerHand.cards.splice(index, 1);
     }
     hoverCard(index: number) {
-        this.#state.playerHand.cards[index].isHovered = true;
-        this.#state.playerHand.numHovered++;
+        this.#state.playerHand.hoveredCardIndex = index;
     }
-    unHoverCard(index: number) {
-        this.#state.playerHand.cards[index].isHovered = false;
-        this.#state.playerHand.numHovered--;
+    unHoverCard() {
+        this.#state.playerHand.hoveredCardIndex = -1;
     }
     playerHandSize() {
         return this.#state.playerHand.cards.length;
     }
-    numHovered() {
-        return this.#state.playerHand.numHovered;
+    isPlayerHandHovered() {
+        return this.#state.playerHand.hoveredCardIndex !== -1;
     }
     findCardInPlayerHand(card: PlayingCard) {
         return this.#state.playerHand.cards.findIndexAndValue(
@@ -98,7 +119,7 @@ export class GameStateMethods {
         return calculateAngle(
             index,
             this.#state.playerHand.cards.length,
-            cardCurve(this.#state.playerHand.numHovered),
+            cardCurve(index, this.#state.playerHand.hoveredCardIndex),
         );
     }
     movingCards() {

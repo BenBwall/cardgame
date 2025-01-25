@@ -101,7 +101,7 @@ export default [
             'consistent-return': 'error',
             'consistent-this': ['error', 'that'],
             'curly': ['error', 'all'],
-            'default-case': 'error',
+            'default-case': 'off',
             'default-case-last': 'error',
             'default-param-last': 'error',
             'dot-notation': 'error',
@@ -202,6 +202,7 @@ export default [
                     varsIgnorePattern: '^_',
                 },
             ],
+            '@typescript-eslint/switch-exhaustiveness-check': 'error',
 
             'prefer-arrow/prefer-arrow-functions': [
                 'error',

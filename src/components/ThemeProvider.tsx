@@ -10,7 +10,7 @@ import {
 } from 'solid-js';
 import { isServer } from 'solid-js/web';
 
-import { assertNotUndef } from '~/util/not-undef';
+import { assertNotNull, assertNotUndef } from '~/util/not-undef';
 
 const THEMES = Object.freeze({
     Dark: 'dark',
@@ -39,8 +39,9 @@ const toConcreteTheme = (theme: Theme): ConcreteTheme => {
 const initServerTheme = () => THEMES.System;
 
 const initClientTheme = () =>
-    assertNotUndef(
+    assertNotNull(
         document.documentElement.getAttribute('data-theme'),
+        'Theme initializing script did not run, and thus data-theme has not been set.',
     ) as Theme;
 
 export const initTheme = () =>

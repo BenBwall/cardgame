@@ -25,7 +25,10 @@ export default createHandler(
                         name='Context-Security-Policy'
                         value={`default-src 'none'; script-src 'nonce-${nonce}'; object-str 'none'; base-uri 'none'`}
                     />
-                    <html lang='en' class='scheme-light dark:scheme-dark'>
+                    <html
+                        lang='en'
+                        class='bg-white scheme-light dark:bg-black dark:scheme-dark'
+                    >
                         <head>
                             <script nonce={nonce} id='theme-script'>
                                 {themeScript}

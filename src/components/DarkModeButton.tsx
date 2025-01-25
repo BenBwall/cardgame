@@ -8,7 +8,7 @@ const DarkModeButton = () => {
                 theme.toggle();
             }}
         >
-            Toggle Dark Mode
+            <p>Toggle Dark Mode</p>
         </button>
     );
 };
