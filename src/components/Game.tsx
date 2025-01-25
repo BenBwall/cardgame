@@ -12,7 +12,7 @@ export type GameProps = {
 };
 
 const Game = (props: GameProps) => {
-    let deckRef!: HTMLLIElement;
+    let deckRef!: HTMLElement;
     const state = useGameState();
     return (
         <div
