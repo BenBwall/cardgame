@@ -2,16 +2,15 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
-    "files.eol": "\n",
-    "cSpell.words": [
-        "backface",
-        "cardgame",
-        "UNINIT"
-    ],
-    "[tailwindcss]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "eslint.format.enable": true,
     "eslint.lintTask.enable": true,
-    "eslint.run": "onSave"
+    "eslint.run": "onSave",
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "files.eol": "\n",
+    "cSpell.words": ["backface", "cardgame", "UNINIT"],
+    "[tailwindcss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }
