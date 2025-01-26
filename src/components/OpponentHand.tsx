@@ -9,7 +9,6 @@ export type OpponentHandProps = {
 };
 
 const OpponentHand = (props: OpponentHandProps) => {
-    const _ = props;
     const state = useGameState();
     return (
         <ul
