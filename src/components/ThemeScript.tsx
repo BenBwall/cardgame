@@ -1,5 +1,5 @@
 const script =
-    '{const e=localStorage.getItem("theme");null!==e&&"system"!==e?document.documentElement.setAttribute("data-theme",e):document.documentElement.setAttribute("data-theme",window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}';
+    '{let e=localStorage.getItem("theme");e=null!==e&&"system"!==e?e:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",e)}';
 
 const ThemeScript = (props: { nonce?: string }) => (
     <script id='theme-script' nonce={props.nonce}>
