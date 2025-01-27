@@ -13,12 +13,12 @@ type FaceUpCardProps = {
     ref?: HTMLElement;
 };
 
-const suitSymbols = Object.freeze({
+const suitSymbols = {
     Clubs: '♣',
     Diamonds: '♦',
     Hearts: '♥',
     Spades: '♠',
-});
+} as const;
 
 const isRedSuit = (suit: Suit) => suit === 'Diamonds' || suit === 'Hearts';
 

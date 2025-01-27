@@ -12,11 +12,11 @@ import { isServer } from 'solid-js/web';
 
 import { assertNotNull, assertNotUndef } from '~/util/not-undef';
 
-const THEMES = Object.freeze({
+const THEMES = {
     Dark: 'dark',
     Light: 'light',
     System: 'system',
-} as const);
+} as const;
 
 type Theme = (typeof THEMES)[keyof typeof THEMES];
 
