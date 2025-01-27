@@ -1,18 +1,9 @@
-import nonce from '~/util/nonce';
+const script = `(() => {const e=localStorage.getItem("theme");if(null!==e&&"system"!==e)document.documentElement.setAttribute("data-theme",e);else{const e=window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.setAttribute("data-theme",e?"dark":"light")}})();`;
 
-const ThemeScript = () => {
-    const script = `
-    (() => {
-        const theme = localStorage.getItem('theme');
-        if (theme != null) {
-            document.documentElement.setAttribute('data-theme', theme);
-        } else {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-        }
-    })();
-    `;
-    return <script id='theme-script' innerHTML={script} nonce={nonce}></script>;
-};
+const ThemeScript = (props: { nonce?: string }) => (
+    <script id='theme-script' nonce={props.nonce}>
+        {script}
+    </script>
+);
 
 export default ThemeScript;
