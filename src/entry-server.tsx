@@ -3,7 +3,7 @@ import { HttpHeader } from '@solidjs/start';
 import { createHandler, StartServer } from '@solidjs/start/server';
 
 import ThemeScript from '~/components/ThemeScript';
-import { getNonce } from '~/util/nonce';
+import { generateNonce, getNonce } from '~/util/nonce';
 
 export default createHandler(
     (event) => {
@@ -47,6 +47,6 @@ export default createHandler(
         );
     },
     () => ({
-        nonce: crypto.randomUUID(),
+        nonce: generateNonce(),
     }),
 );
