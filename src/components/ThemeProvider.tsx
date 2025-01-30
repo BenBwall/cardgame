@@ -63,6 +63,10 @@ class ThemeMethods {
         this.#setState(value);
     }
 
+    get concreteTheme() {
+        return toConcreteTheme(this.#state());
+    }
+
     update(updater: (oldValue: Theme) => Theme) {
         this.#setState(updater);
     }
@@ -95,7 +99,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
         localStorage.setItem('theme', methods.theme);
         document.documentElement.setAttribute(
             'data-theme',
-            toConcreteTheme(methods.theme),
+            methods.concreteTheme,
         );
     });
     return (
