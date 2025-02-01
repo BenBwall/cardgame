@@ -9,7 +9,13 @@
         "*.css": "tailwindcss"
     },
     "files.eol": "\n",
-    "cSpell.words": ["backface", "cardgame", "UNINIT"],
+    "cSpell.words": [
+        "backface",
+        "cardgame",
+        "solidjs",
+        "UNINIT",
+        "vinxi"
+    ],
     "[tailwindcss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
