@@ -67,12 +67,8 @@ class ThemeMethods {
         return toConcreteTheme(this.#state());
     }
 
-    update(updater: (oldValue: Theme) => Theme) {
-        this.#setState(updater);
-    }
-
     toggle() {
-        this.update((theme) => (theme === 'light' ? 'dark' : 'light'));
+        this.#setState((theme) => (theme === 'light' ? 'dark' : 'light'));
     }
 }
 
