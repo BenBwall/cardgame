@@ -1,26 +1,26 @@
-import { JSX } from 'solid-js';
-import { createMutable } from 'solid-js/store';
+import { createContext, JSX, useContext } from 'solid-js';
 
-import {
-    defaultGameState,
-    GameState,
-    GameStateContextProvider,
-    GameStateMethods,
-} from '~/game-logic/game-state';
+import GameStateMethods from '~/game-logic/game-state';
+import { assertNotUndef } from '~/util/not-undef';
+
+const GameStateContext = createContext<GameStateMethods>(undefined, {
+    name: 'Game State Context',
+});
+
+const useGameState = () =>
+    assertNotUndef(
+        useContext(GameStateContext),
+        'useGameState must be used within a GameStateProvider',
+    );
+
+export default useGameState;
 
 export type GameStateProviderProps = {
     children: JSX.Element;
 };
 
-const GameStateProvider = (props: GameStateProviderProps) => {
-    const gameState = createMutable<GameState>(defaultGameState(), {
-        name: 'Game State',
-    });
-    return (
-        <GameStateContextProvider value={new GameStateMethods(gameState)}>
-            {props.children}
-        </GameStateContextProvider>
-    );
-};
-
-export default GameStateProvider;
+export const GameStateProvider = (props: GameStateProviderProps) => (
+    <GameStateContext.Provider value={new GameStateMethods()}>
+        {props.children}
+    </GameStateContext.Provider>
+);

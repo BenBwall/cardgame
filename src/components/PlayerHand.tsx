@@ -1,7 +1,7 @@
 import { For } from 'solid-js';
 
 import FaceUpCard from '~/components/FaceUpCard';
-import useGameState from '~/game-logic/game-state';
+import useGameState from '~/components/GameStateProvider';
 
 export type PlayerHandProps = {
     playerName: string;

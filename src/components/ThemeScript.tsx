@@ -5,6 +5,9 @@ export type ThemeScriptProps = {
     nonce?: string;
 };
 
+/**
+ * Script that sets the current theme to the user's preference before the initial render.
+ */
 const ThemeScript = (props: ThemeScriptProps) => (
     <script nonce={props.nonce}>{script}</script>
 );

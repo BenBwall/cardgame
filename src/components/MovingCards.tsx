@@ -2,9 +2,9 @@ import '~/util/find-index-and-value';
 
 import { Accessor, For } from 'solid-js';
 
+import useGameState from '~/components/GameStateProvider';
 import MovingCard from '~/components/MovingCard';
 import { PlayingCard } from '~/game-logic/card';
-import useGameState from '~/game-logic/game-state';
 import { assertNotUndef } from '~/util/not-undef';
 import { Position2d } from '~/util/position';
 

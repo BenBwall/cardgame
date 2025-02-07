@@ -2,6 +2,8 @@
 import { HttpHeader } from '@solidjs/start';
 import { createHandler, StartServer } from '@solidjs/start/server';
 
+import JavaScriptCheckScript from '~/components/JavascriptCheckScript';
+import NoScript from '~/components/NoScript';
 import ThemeScript from '~/components/ThemeScript';
 import { generateNonce, getNonce } from '~/util/nonce';
 
@@ -37,7 +39,11 @@ export default createHandler(
                                 {assets}
                             </head>
                             <body>
-                                <div id='app'>{children}</div>
+                                <div id='app' class='hidden'>
+                                    {children}
+                                </div>
+                                <NoScript />
+                                <JavaScriptCheckScript nonce={nonce} />
                                 {scripts}
                             </body>
                         </html>

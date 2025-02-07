@@ -1,9 +1,9 @@
 import Deck from '~/components/Deck';
+import useGameState from '~/components/GameStateProvider';
 import MovingCards from '~/components/MovingCards';
 import OpponentHand from '~/components/OpponentHand';
 import Options from '~/components/Options';
 import PlayerHand from '~/components/PlayerHand';
-import useGameState from '~/game-logic/game-state';
 
 export type HtmlRef<T extends HTMLElement> = { inner: T };
 

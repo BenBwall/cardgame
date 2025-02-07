@@ -1,7 +1,7 @@
 import '~/util/find-index-and-value';
 import '~/util/remove-at';
 
-import { createContext, useContext } from 'solid-js';
+import { createMutable } from 'solid-js/store';
 
 import { HtmlRef } from '~/components/Game';
 import {
@@ -16,25 +16,25 @@ import { shuffle } from '~/util/array';
 import { assertNotUndef } from '~/util/not-undef';
 import createSSRSafe from '~/util/ssr-safe';
 
-export type OpponentHandCardState = {
+type OpponentHandCardState = {
     isVisible: boolean;
     index: number;
     ref: HtmlRef<HTMLElement>;
 };
 
-export type PlayerHandCardState = {
+type PlayerHandCardState = {
     isVisible: boolean;
     value: PlayingCard;
     ref: HtmlRef<HTMLElement>;
 };
 
-export type PlayerHandState = {
+type PlayerHandState = {
     cards: PlayerHandCardState[];
     hoveredCardIndex: number;
     sortConfig: CardSortConfig | undefined;
 };
 
-export type GameState = {
+type GameState = {
     deck: PlayingCard[];
     movingCards: PlayingCard[];
     opponentHand: OpponentHandCardState[];
@@ -43,12 +43,22 @@ export type GameState = {
 
 const generateStartingCards = () => shuffle([...DEFAULT_DECK] as PlayingDeck);
 
-export const defaultGameState = (): GameState => ({
-    deck: createSSRSafe(generateStartingCards),
-    movingCards: [],
-    opponentHand: [],
-    playerHand: { cards: [], hoveredCardIndex: -1, sortConfig: undefined },
-});
+const createGameState = (): GameState =>
+    createMutable(
+        {
+            deck: createSSRSafe(generateStartingCards),
+            movingCards: [],
+            opponentHand: [],
+            playerHand: {
+                cards: [],
+                hoveredCardIndex: -1,
+                sortConfig: undefined,
+            },
+        },
+        {
+            name: 'Game State',
+        },
+    );
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-parameters
 const UNINIT_HTML_ELEMENT = <T extends HTMLElement>(): T => (void 0)!;
@@ -64,10 +74,10 @@ const cardCurve = (index: number, hoveredCardIndex: number) =>
         HOVERED_CARD_CURVE_IN_DEGREES
     :   BASE_CARD_CURVE_IN_DEGREES;
 
-export class GameStateMethods {
+export default class GameStateMethods {
     #state: GameState;
-    constructor(state: GameState) {
-        this.#state = state;
+    constructor() {
+        this.#state = createGameState();
     }
     drawCard() {
         return this.#state.deck.pop();
@@ -133,17 +143,3 @@ export class GameStateMethods {
         playerHandState.isVisible = true;
     }
 }
-
-const GameStateContext = createContext<GameStateMethods>(undefined, {
-    name: 'Game State Context',
-});
-
-const useGameState = () =>
-    assertNotUndef(
-        useContext(GameStateContext),
-        'useGameState must be used within a GameStateProvider',
-    );
-
-export const GameStateContextProvider = GameStateContext.Provider;
-
-export default useGameState;

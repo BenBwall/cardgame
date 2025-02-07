@@ -1,8 +1,8 @@
 import { Show } from 'solid-js';
 
 import FaceDownCard from '~/components/FaceDownCard';
+import useGameState from '~/components/GameStateProvider';
 import { PlayingCard } from '~/game-logic/card';
-import useGameState from '~/game-logic/game-state';
 
 export type DeckProps = {
     ref: HTMLElement;
