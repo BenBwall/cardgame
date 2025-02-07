@@ -10,9 +10,6 @@ declare global {
 
 Object.defineProperty(Array.prototype, 'removeAt', {
     value<T>(this: T[], index: number): T | undefined {
-        if (index < 0 || index >= this.length) {
-            return undefined;
-        }
         return this.splice(index, 1)[0];
     },
 });
