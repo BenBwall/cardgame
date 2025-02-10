@@ -2,7 +2,7 @@ const script =
     '{let e=localStorage.getItem("theme");e=null!==e&&"system"!==e?e:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",e);}';
 
 export type ThemeScriptProps = {
-    nonce?: string;
+    nonce: string;
 };
 
 /**
