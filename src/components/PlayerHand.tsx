@@ -11,7 +11,7 @@ export type PlayerHandProps = {
 const PlayerHand = (props: PlayerHandProps) => {
     const state = useGameState();
     return (
-        <ul class={props.class ?? ''}>
+        <ul class={`justify-self-center ${props.class ?? ''}`}>
             <For each={state.playerHand()}>
                 {(card, index) => (
                     <FaceUpCard

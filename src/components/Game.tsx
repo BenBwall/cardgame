@@ -15,36 +15,38 @@ const Game = (props: GameProps) => {
     let deckRef!: HTMLElement;
     const state = useGameState();
     return (
-        <div
-            class='grid h-screen w-screen gap-4'
-            style={{
-                'grid-template-areas':
-                    '"opponent-hand opponent-hand" "deck deck" "options player-hand";',
-            }}
-        >
-            <OpponentHand
-                playerName='Opponent'
-                class='[grid-area:opponent-hand]'
-            />
-            <Deck
-                class='[grid-area:deck]'
-                ref={deckRef}
-                onCardDrawn={(card) => {
-                    state.playerDrawnCard(card);
+        <>
+            <Options />
+            <div
+                class='grid h-screen w-screen gap-4'
+                style={{
+                    'grid-template-areas':
+                        '"opponent-hand opponent-hand" "deck deck" "player-hand player-hand";',
                 }}
-            />
-            <Options class='[grid-area:options]' />
-            <PlayerHand
-                class='[grid-area:player-hand]'
-                playerName={props.playerName}
-            />
-            <MovingCards
-                deckPosition={deckRef.getBoundingClientRect()}
-                onFinishedMoving={(index) => {
-                    state.cardHasFinishedMovingToPlayerHand(index());
-                }}
-            />
-        </div>
+            >
+                <OpponentHand
+                    playerName='Opponent'
+                    class='[grid-area:opponent-hand]'
+                />
+                <Deck
+                    class='[grid-area:deck]'
+                    ref={deckRef}
+                    onCardDrawn={(card) => {
+                        state.playerDrawnCard(card);
+                    }}
+                />
+                <PlayerHand
+                    class='[grid-area:player-hand]'
+                    playerName={props.playerName}
+                />
+                <MovingCards
+                    deckPosition={deckRef.getBoundingClientRect()}
+                    onFinishedMoving={(index) => {
+                        state.cardHasFinishedMovingToPlayerHand(index());
+                    }}
+                />
+            </div>
+        </>
     );
 };
 

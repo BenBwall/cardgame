@@ -3,7 +3,9 @@ export type OptionsProps = {
 };
 
 const Options = (props: OptionsProps) => (
-    <div class={props.class ?? ''}>Options Oh Boy!</div>
+    <div class={`fixed top-60 left-0 ${props.class ?? ''}`}>
+        Options Oh Boy!
+    </div>
 );
 
 export default Options;

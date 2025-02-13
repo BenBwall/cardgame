@@ -12,25 +12,31 @@ import { isServer } from 'solid-js/web';
 
 import { assertNotNull, assertNotUndef } from '~/util/not-undef';
 
-const THEMES = {
+export const THEMES = {
     Dark: 'dark',
     Light: 'light',
     System: 'system',
 } as const;
 
-type Theme = (typeof THEMES)[keyof typeof THEMES];
+export type Theme = (typeof THEMES)[keyof typeof THEMES];
 
-type ConcreteTheme = Exclude<Theme, 'system'>;
+export const CONCRETE_THEMES = (() => {
+    const { System: _, ...CONCRETE_THEMES } = THEMES;
+    return CONCRETE_THEMES;
+})();
+
+export type ConcreteTheme =
+    (typeof CONCRETE_THEMES)[keyof typeof CONCRETE_THEMES];
 
 const getSystemColorMode = () => {
     const systemIsDark = window.matchMedia(
         '(prefers-color-scheme: dark)',
     ).matches;
-    return systemIsDark ? 'dark' : 'light';
+    return systemIsDark ? CONCRETE_THEMES.Dark : CONCRETE_THEMES.Light;
 };
 
 const toConcreteTheme = (theme: Theme): ConcreteTheme => {
-    if (theme !== 'system') {
+    if (theme !== THEMES.System) {
         return theme;
     }
     return getSystemColorMode();
@@ -47,7 +53,7 @@ const initClientTheme = () =>
 export const initTheme = () =>
     isServer ? initServerTheme() : initClientTheme();
 
-class ThemeMethods {
+export class ThemeMethods {
     #state: Accessor<Theme>;
     #setState: Setter<Theme>;
 
@@ -55,11 +61,11 @@ class ThemeMethods {
         [this.#state, this.#setState] = signal;
     }
 
-    get theme() {
+    get theme(): Theme {
         return this.#state();
     }
 
-    set theme(value) {
+    set theme(value: Parameters<Setter<Theme>>[0]) {
         this.#setState(value);
     }
 
@@ -68,7 +74,9 @@ class ThemeMethods {
     }
 
     toggle() {
-        this.#setState((theme) => (theme === 'light' ? 'dark' : 'light'));
+        this.#setState((theme) =>
+            theme === THEMES.Light ? THEMES.Dark : THEMES.Light,
+        );
     }
 }
 
