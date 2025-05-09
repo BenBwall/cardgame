@@ -1,7 +1,7 @@
 import { fixupPluginRules } from '@eslint/compat';
 import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
-import importPlugin from 'eslint-plugin-import-x';
+import { flatConfigs } from 'eslint-plugin-import-x';
 import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 import preferArrow from 'eslint-plugin-prefer-arrow';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
@@ -27,8 +27,8 @@ export default [
     js.configs.recommended,
     ...tsConfigs.strictTypeChecked,
     ...tsConfigs.stylisticTypeChecked,
-    importPlugin.flatConfigs.recommended,
-    importPlugin.flatConfigs.typescript,
+    flatConfigs.recommended,
+    flatConfigs.typescript,
     eslintPluginPrettier,
     {
         languageOptions: {
