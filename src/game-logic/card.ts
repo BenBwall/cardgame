@@ -26,7 +26,9 @@ export type PlayingCard = Readonly<{
     suit: Suit;
     rank: Rank;
 }>;
+
 export const PLAYING_DECK_SIZE = 52;
+
 // 52 card deck. 13 ranks, 4 suits.
 export type PlayingDeck = FixedSizeArray<PlayingCard, typeof PLAYING_DECK_SIZE>;
 
@@ -44,6 +46,7 @@ export const isSameCard = (a: PlayingCard, b: PlayingCard) =>
     a.rank === b.rank && a.suit === b.suit;
 
 export type CardSortKey = 'rank-then-suit' | 'suit-then-rank';
+
 export type CardSortConfig = {
     sortKey: CardSortKey;
     acesAreHigh: false;
