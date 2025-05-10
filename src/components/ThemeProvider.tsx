@@ -4,13 +4,14 @@ import {
     createEffect,
     createSignal,
     JSX,
+    onMount,
     Setter,
     Signal,
     useContext,
 } from 'solid-js';
 import { isServer } from 'solid-js/web';
 
-import { assertNotNull, assertNotUndef } from '~/util/not-undef';
+import { assertNotUndef } from '~/util/not-undef';
 
 export const THEMES = {
     Dark: 'dark',
@@ -45,10 +46,7 @@ const toConcreteTheme = (theme: Theme): ConcreteTheme => {
 const initServerTheme = () => THEMES.System;
 
 const initClientTheme = () =>
-    assertNotNull(
-        document.documentElement.getAttribute('data-theme'),
-        'Theme initializing script did not run, and thus data-theme has not been set.',
-    ) as Theme;
+    (localStorage.getItem('theme') ?? THEMES.System) as Theme;
 
 export const initTheme = () =>
     isServer ? initServerTheme() : initClientTheme();
@@ -99,6 +97,20 @@ const ThemeProvider = (props: ThemeProviderProps) => {
         name: 'Theme State',
     });
     const methods = new ThemeMethods(signal);
+    onMount(() => {
+        window
+            .matchMedia('(prefers-color-scheme: dark)')
+            .addEventListener('change', (e) => {
+                if (methods.theme === THEMES.System) {
+                    document.documentElement.setAttribute(
+                        'data-theme',
+                        e.matches ?
+                            CONCRETE_THEMES.Dark
+                        :   CONCRETE_THEMES.Light,
+                    );
+                }
+            });
+    });
     createEffect(() => {
         localStorage.setItem('theme', methods.theme);
         document.documentElement.setAttribute(
