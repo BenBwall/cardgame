@@ -4,6 +4,7 @@ import {
     createEffect,
     createSignal,
     JSX,
+    onCleanup,
     onMount,
     Setter,
     Signal,
@@ -12,6 +13,9 @@ import {
 import { isServer } from 'solid-js/web';
 
 import { assertNotUndef } from '~/util/not-undef';
+
+const themeWatcher =
+    isServer ? undefined : window.matchMedia('(prefers-color-scheme: dark)');
 
 export const THEMES = {
     Dark: 'dark',
@@ -30,9 +34,7 @@ export type ConcreteTheme =
     (typeof CONCRETE_THEMES)[keyof typeof CONCRETE_THEMES];
 
 const getSystemColorMode = () => {
-    const systemIsDark = window.matchMedia(
-        '(prefers-color-scheme: dark)',
-    ).matches;
+    const systemIsDark = assertNotUndef(themeWatcher).matches;
     return systemIsDark ? CONCRETE_THEMES.Dark : CONCRETE_THEMES.Light;
 };
 
@@ -97,19 +99,23 @@ const ThemeProvider = (props: ThemeProviderProps) => {
         name: 'Theme State',
     });
     const methods = new ThemeMethods(signal);
+    const themeChangeListener = (e: MediaQueryListEvent) => {
+        if (methods.theme === THEMES.System) {
+            document.documentElement.setAttribute(
+                'data-theme',
+                e.matches ? CONCRETE_THEMES.Dark : CONCRETE_THEMES.Light,
+            );
+        }
+    };
     onMount(() => {
-        window
-            .matchMedia('(prefers-color-scheme: dark)')
-            .addEventListener('change', (e) => {
-                if (methods.theme === THEMES.System) {
-                    document.documentElement.setAttribute(
-                        'data-theme',
-                        e.matches ?
-                            CONCRETE_THEMES.Dark
-                        :   CONCRETE_THEMES.Light,
-                    );
-                }
-            });
+        if (themeWatcher) {
+            themeWatcher.addEventListener('change', themeChangeListener);
+        }
+    });
+    onCleanup(() => {
+        if (themeWatcher) {
+            themeWatcher.removeEventListener('change', themeChangeListener);
+        }
     });
     createEffect(() => {
         localStorage.setItem('theme', methods.theme);
